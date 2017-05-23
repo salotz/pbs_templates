@@ -1,0 +1,300 @@
+#!/bin/sh -login
+#PBS -N <<name of job >>
+#PBS -l walltime=<<walltime>>
+#PBS -l mem=64gb
+#PBS -l nodes=2:ppn=8:gpus=8
+#PBS -l feature='gpgpu:intel16'
+#PBS -e pbs.err
+#PBS -o pbs.out
+#PBS -M samuel.lotz@gmail.com
+#PBS -m abe
+
+#------------------------------ 
+
+# script for running jobs on HPCC
+
+
+## set the base name for this script
+################################################################################
+# base directory for this script
+BASE="NETS_TS_2"
+BASEDIR="sEH/$BASE"
+
+################################################################################
+
+# the job name
+JOBNAME=${BASE}-${PBS_JOBID}
+# directories, keep these named the same as this is a common pattern
+# the main development directory
+DEVDIR=$MY_DICKSON_LAB/$BASEDIR
+# the directory with all of the input
+INPUTDIR=$DEVDIR/input
+# directory to put job results in
+JOBSDIR=$DEVDIR/jobs
+# the directory for the output of this job
+JOBDIR=$JOBSDIR/$PBS_JOBID
+# the directory output will be put into after completion
+OUTPUTDIR=$JOBDIR/output
+# directory to execute code in
+# EXECDIR=$TMPDIR
+# EXECDIR=$MY_DICKSON_SCRATCH/$JOBNAME
+###### README Problems with Scratch so I will just run in the jobs dir
+EXECDIR=$JOBDIR
+# directory to put temporary output in
+EXECOUTPUTDIR=$EXECDIR/output
+# directories to copy the stdout and stderr from scripts
+STDOUT=$JOBDIR/stdout
+STDERR=$JOBDIR/stderr
+# we should redirect our own output streams but we will catch the PBS
+# files as well
+PBS_STDOUT=$PBS_O_WORKDIR/pbs.out
+PBS_STDERR=$PBS_O_WORKDIR/pbs.err
+# log files
+LOG=$JOBDIR/log
+
+
+# make these directories if they do not exist
+mkdir -p $EXECDIR 
+mkdir -p $EXECOUTPUTDIR
+mkdir -p $JOBDIR 
+mkdir -p $OUTPUTDIR
+mkdir -p $STDOUT 
+mkdir -p $STDERR
+mkdir -p $PBS_STDOUT 
+mkdir -p $PBS_STDERR
+echo "Starting Log file" 1> $LOG 2> $LOG
+
+# initial
+#----------------------------------------
+# load profile
+source /etc/profile
+# load hpcc modules
+source /opt/software/modulefiles/setup_modules.sh
+# load specific library modules
+module load GNU/4.8.3
+module load CUDA/7.0
+
+# general paths
+#----------------------------------------
+
+# scratch directory
+export SCRATCHDIR=/mnt/ls15/scratch
+# your home scratch
+export SCRATCH_HOME=$SCRATCH
+
+# the Dickson lab directory
+export DICKSON_LAB=/mnt/research/DicksonLab
+# your Dickson lab dir
+export MY_DICKSON_LAB=$DICKSON_LAB/$USER
+# locally installed programs
+export DICKSON_LAB_PROGS=${DICKSON_LAB}/programs
+# the installed binaries for Dickson lab
+export DICKSON_LAB_BIN=${DICKSON_LAB_PROGS}/bin
+# directory with installed libraries
+export DICKSON_LAB_LIB=${DICKSON_LAB_PROGS}/lib
+# Dickson lab scratch directory
+export DICKSON_SCRATCH=$SCRATCHDIR/groups/DicksonLab
+# your Dickson lab scratch dir
+export MY_DICKSON_SCRATCH=$DICKSON_SCRATCH/$USER
+
+# set environmental variables to programs needed
+#----------------------------------------
+# charmm executables
+export CHARMM_DIR=${DICKSON_LAB_PROGS}/charmm
+export CHARMM=${CHARMM_DIR}/exec/gnu/charmm
+export MPICHARMM=${CHARMM_DIR}/exec/gnu_M/charmm
+export OPENMMCHARMM=${CHARMM_DIR}/exec/gnu/charmm_OpenMM6.3
+
+# charmm data
+export CHARMMDATA=${DICKSON_LAB}/toppar
+
+# set the path for mmtsb
+export MMTSBDIR=$DICKSON_LAB_PROGS/mmtsb
+
+# OpenMM
+export OPENMM_ROOT_DIR=/mnt/research/DicksonLab/programs/OpenMM6.3
+export OPENMM_PLUGIN_DIR=$OPENMM_ROOT_DIR/lib/plugins
+export OPENMM_PLATFORM=CUDA
+unset OPENMM_DEVICE
+
+
+# Anaconda Python paths
+export ANACONDA_DIR=$DICKSON_LAB_PROGS/anaconda2
+export ANACONDA_BIN=$ANACONDA_DIR/bin
+export PYTHONHOME=$ANACONDA_DIR 
+
+# Library paths
+export LD_LIBRARY_PATH=${DICKSON_LAB_LIB}:${CUDADIR}/lib:${OPENMM_ROOT_DIR}/lib:${OPENMM_PLUGIN_DIR}:${LD_LIBRARY_PATH}
+
+# PATH
+export PATH=$ANACONDA_BIN:${DICKSON_LAB_BIN}:${OPENMM_ROOT_DIR}/bin:${MMTSBDIR}/perl:${DICKSON_LAB_PROGS}/charmm/exec/gnu:${PATH}
+
+# check to make sure all these paths are correct
+echo "" 1>> $LOG 2>> $LOG
+echo "LOG $LOG" 1>> $LOG 2>> $LOG
+
+
+#------------------------------
+## the paths to the scripts used in this run
+################################################################################
+## NETS
+NETS_BASE=NETS.pl
+NETS_ORIGIN=/mnt/research/DicksonLab/devel/NETS/$NETS_BASE
+echo "" 1>> $LOG 2>> $LOG
+echo "NETS_ORIGIN $NETS_ORIGIN" 1>> $LOG 2>> $LOG
+################################################################################
+
+# change to the exec dir
+cd $EXECDIR
+
+# check to make sure all these paths for the job are correct
+echo "" 1>> $LOG 2>> $LOG
+echo "LOG $LOG" 1>> $LOG 2>> $LOG
+echo "PBS_JOBID $PBS_JOBID" 1>> $LOG 2>> $LOG
+echo "BASE $BASE" 1>> $LOG 2>> $LOG
+echo "BASEDIR $BASEDIR" 1>> $LOG 2>> $LOG
+echo "JOBNAME $JOBNAME" 1>> $LOG 2>> $LOG
+echo "DEVDIR $DEVDIR" 1>> $LOG 2>> $LOG
+echo "JOBSDIR $JOBSDIR" 1>> $LOG 2>> $LOG
+echo "JOBDIR $JOBDIR" 1>> $LOG 2>> $LOG
+echo "OUTPUTDIR $OUTPUTDIR" 1>> $LOG 2>> $LOG
+echo "EXECDIR $EXECDIR" 1>> $LOG 2>> $LOG
+echo "STDOUT $STDOUT" 1>> $LOG 2>> $LOG
+echo "STDERR $STDERR" 1>> $LOG 2>> $LOG
+echo "PBS_STDOUT $PBS_STDOUT" 1>> $LOG 2>> $LOG
+echo "PBS_STDERR $PBS_STDERR" 1>> $LOG 2>> $LOG
+echo "PBS_NODEFILE" 1>> $LOG 2>> $LOG
+cat $PBS_NODEFILE 1>> $LOG 2>> $LOG
+echo ""  1>> $LOG 2>> $LOG
+
+#------------------------------
+## define the input files for this script and put them into an array
+################################################################################
+# input file names, these live in $DEVDIR and possibly subdirectories
+#input_files=($IN_STEP61 $IN_STEP62 $IN_STEP63 $IN_STEP64 $IN_STEP65 $IN_STEP66)
+################################################################################
+
+
+# remove current contents of the execdir, useful for if running
+# interactive job which writes to same dir
+echo "Removing existing files if they exist in $EXECDIR" 1>> $LOG 2>> $LOG
+rm -rf $EXECDIR/* 1>> $LOG 2>> $LOG
+# copy the input files to the execution directory
+echo "Copying input files from $INPUTDIR to $EXECDIR" 1>> $LOG 2>> $LOG
+cp -rf $INPUTDIR/* $EXECDIR/ 1>> $LOG 2>> $LOG
+
+#------------------------------
+################################################################################
+echo "Copying scripts used to $EXECDIR" 1>> $LOG 2>> $LOG
+cp -f $NETS_ORIGIN $EXECDIR/ 1>> $LOG 2>> $LOG
+################################################################################
+
+echo ">> ls $EXECDIR" 1>> $LOG 2>> $LOG
+ls $EXECDIR 1>> $LOG 2>> $LOG
+echo "" 1>> $LOG 2>> $LOG
+echo ">> ls $OPENMM" 1>> $LOG 2>> $LOG
+ls $OPENMM 1>> $LOG 2>> $LOG
+echo ""  1>> $LOG 2>> $LOG
+
+#------------------------------
+## define the output files for this script and put them into an array
+################################################################################
+# output file names, these live in $DEVDIR and possibly subdirectories
+
+#output_files=($OUT_STEP61 $OUT_STEP62 $OUT_STEP63 $OUT_STEP64 $OUT_STEP65 $OUT_STEP66)
+################################################################################
+
+
+#------------------------------
+## set the parameters that will be used in this script
+################################################################################
+# parameters
+ALLNODES="allnodes"
+START_RST="walker_0_0.rst"
+
+BASINFILE="basin.inp"
+
+DYN="dyn.inp"
+HSTFILES="op1.inp"
+
+GPUSPERNODE=8
+CHECK=10000
+NCYCLES=200000
+NP=1
+WORKERS=16
+# the number of initial structure files running
+NWALK=$WORKERS
+
+NHIST=2
+NINIT=100
+
+INPUT="init.inp"
+OUTPUT="nets.out"
+
+echo "Using parameters:" 1>> $LOG 2>> $LOG
+echo ALLNODES $ALLNODES 1>> $LOG 2>> $LOG
+echo START_RST $START_RST 1>> $LOG 2>> $LOG
+echo DYN $DYN 1>> $LOG 2>> $LOG
+echo BASINFILE $BASINFILE 1>> $LOG 2>> $LOG
+echo HSTFILES $HSTFILES 1>> $LOG 2>> $LOG
+echo GPUSPERNODE $GPUSPERNODE 1>> $LOG 2>> $LOG
+echo CHECK $CHECK 1>> $LOG 2>> $LOG
+echo NCYCLES $NCYCLES 1>> $LOG 2>> $LOG
+echo NP $NP 1>> $LOG 2>> $LOG
+echo WORKERS $WORKERS 1>> $LOG 2>> $LOG
+echo NWALK $NWALK 1>> $LOG 2>> $LOG
+echo NHIST $NHIST 1>> $LOG 2>> $LOG
+ echo NINIT $NINIT 1>> $LOG 2>> $LOG
+echo INPUT $INPUT 1>> $LOG 2>> $LOG
+echo OUTPUT $OUTPUT 1>> $LOG 2>> $LOG
+echo "" 1>> $LOG 2>> $LOG
+
+################################################################################
+
+
+#------------------------------
+## The code for this script
+################################################################################
+
+#echo "Changing to output dir $EXECOUTPUTDIR"  1>> $LOG 2>> $LOG
+#cd $EXECOUTPUTDIR 1>> $LOG 2>> $LOG
+echo "" 1>> $LOG 2>> $LOG
+echo "Creating allnodes file from $PBS_NODEFILE" 1>> $LOG 2>> $LOG
+cat $PBS_NODEFILE > $ALLNODES 2>> $LOG
+
+echo "Running NETS" 1>> $LOG 2>> $LOG
+echo "-----------------------" 1>> $LOG 2>> $LOG
+
+$EXECDIR/$NETS_BASE \
+-init $EXECDIR/$INPUT \
+-dyn $EXECDIR/$DYN \
+-fromscratch \
+-basinfile $BASINFILE \
+-gpuspernode $GPUSPERNODE \
+-check $CHECK \
+-ncycles $NCYCLES \
+-np $NP \
+-keepvel \
+-workers $WORKERS \
+-nwalk $NWALK \
+-charmmexec $CHARMM \
+-nhist $NHIST \
+-hstfiles $EXECDIR/$HSTFILES \
+-writetraj \
+-ninit $NINIT \
+-log 1>> $OUTPUT 2>> $OUTPUT
+
+echo "-----------------------" 1>> $LOG 2>> $LOG
+echo "" 1>> $LOG 2>> $LOG
+echo "done with NETS" 1>> $LOG 2>> $LOG
+
+#echo "copying output files back to $OUTPUTDIR from $EXECDIR" 1>> $LOG 2>> $LOG
+#cp -rf $EXECDIR/ $OUTPUTDIR/ 1>> $LOG 2>> $LOG
+################################################################################
+
+# copy the output files back to the job directory
+# echo "copying output files from $EXECDIR to $OUTPUTDIR" 1>> $LOG 2>> $LOG
+#cp -rf $EXECDIR/ $OUTPUTDIR/
+
+# and remove all files from scratch
+#rm -rf $EXECDIR 2>> $LOG
