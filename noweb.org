@@ -1,0 +1,105 @@
+* Fill in these fields here:
+
+#+name: job-name
+#+BEGIN_SRC bash
+  test-job-name
+#+END_SRC
+
+
+#+name: walltime
+#+BEGIN_SRC bash
+  168:00:00
+#+END_SRC
+
+#+name: memory
+#+BEGIN_SRC bash
+  64gb
+#+END_SRC
+
+#+name: num-nodes
+#+BEGIN_SRC bash
+  2
+#+END_SRC
+
+#+name: num-processors
+#+BEGIN_SRC bash
+  8
+#+END_SRC
+
+#+name: num-gpus
+#+BEGIN_SRC bash
+  8
+#+END_SRC
+
+#+name: feature
+#+BEGIN_SRC bash
+  'gpgpu:intel16'
+#+END_SRC
+
+#+name: base-name
+#+BEGIN_SRC bash
+  test-job-name
+#+END_SRC
+
+#+name: proj-dir-name
+#+BEGIN_SRC bash
+  test-project
+#+END_SRC
+
+
+* The script
+#+BEGIN_SRC bash :tangle test.sh :noweb yes :shebang #!/bin/sh -login
+  #PBS -N <<job-name>>
+  #PBS -l walltime=<<walltime>>
+  #PBS -l mem=<<memory>>
+  #PBS -l nodes=<<num-nodes>>:ppn=<<num-processors>>:gpus=<<num-gpus>>
+  #PBS -l feature=<<feature>>
+  #PBS -e pbs.err
+  #PBS -o pbs.out
+  #PBS -M <<email>>
+  #PBS -m abe
+
+  #------------------------------
+
+  # script for running jobs on HPCC
+
+
+  ## set the base name for this script
+  ################################################################################
+  # base directory for this script
+  BASE="<<base-name>>"
+  PROJDIR="<<proj-dir>>"
+  BASEDIR="$PROJDIR/$BASE"
+
+  ################################################################################
+
+  # the job name
+  JOBNAME=${BASE}-${PBS_JOBID}
+  # directories, keep these named the same as this is a common pattern
+  # the main development directory
+  DEVDIR=$MY_DICKSON_LAB/$BASEDIR
+  # the directory with all of the input
+  INPUTDIR=$DEVDIR/input
+  # directory to put job results in
+  JOBSDIR=$DEVDIR/jobs
+  # the directory for the output of this job
+  JOBDIR=$JOBSDIR/$PBS_JOBID
+  # the directory output will be put into after completion
+  OUTPUTDIR=$JOBDIR/output
+  # directory to execute code in
+  # EXECDIR=$TMPDIR
+  # EXECDIR=$MY_DICKSON_SCRATCH/$JOBNAME
+  ###### README Problems with Scratch so I will just run in the jobs dir
+  EXECDIR=$JOBDIR
+  # directory to put temporary output in
+  EXECOUTPUTDIR=$EXECDIR/output
+  # directories to copy the stdout and stderr from scripts
+  STDOUT=$JOBDIR/stdout
+  STDERR=$JOBDIR/stderr
+  # we should redirect our own output streams but we will catch the PBS
+  # files as well
+  PBS_STDOUT=$PBS_O_WORKDIR/pbs.out
+  PBS_STDERR=$PBS_O_WORKDIR/pbs.err
+  # log files
+  LOG=$JOBDIR/log
+#+END_SRC
