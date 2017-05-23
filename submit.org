@@ -1,72 +1,100 @@
 * Fill in these fields here:
+** task name
 
-#+name: job-name
+When running PBS scripts you might want to run something multiple
+times or have to deal with debugging which can become messy.
+We organize by "task", which is a unit of something we want to get
+done, and then organize all the outputs it produces in a sane way.
+
+The task name must (and should) also be the name of the directory the
+task is set up in.
+
+#+name: task-name
 #+BEGIN_SRC bash
-  test-job-name
+  test-task-name
 #+END_SRC
 
+** task dir
+
+Task directories should be organized in some way. This variable is the
+path preceeding your task dir.
+
+For instance if you working in `$HOME/this_project/task1` then your
+task dir would be `$HOME/this_project`.
+
+#+name: task-dir-path
+#+BEGIN_SRC bash
+  $MY_DICKSON_LAB
+#+END_SRC
+
+
+** wall time
 
 #+name: walltime
 #+BEGIN_SRC bash
-  168:00:00
+  5:00
 #+END_SRC
 
+** memory
 #+name: memory
 #+BEGIN_SRC bash
-  64gb
+  4gb
 #+END_SRC
 
+** number of nodes
 #+name: num-nodes
 #+BEGIN_SRC bash
-  2
+  1
 #+END_SRC
 
+** number of processors
 #+name: num-processors
 #+BEGIN_SRC bash
-  8
+  1
 #+END_SRC
+
+** number of GPUs
 
 #+name: num-gpus
 #+BEGIN_SRC bash
-  8
+  0
 #+END_SRC
+
+** feature
+
+One use for this is to put in 'gpgpu:intel16'.
 
 #+name: feature
 #+BEGIN_SRC bash
-  'gpgpu:intel16'
+  ''
 #+END_SRC
 
+** email
 #+name: email
 #+BEGIN_SRC bash
   samuel.lotz@gmail.com
 #+END_SRC
 
-#+name: base-name
-#+BEGIN_SRC bash
-  test-job-name
-#+END_SRC
-
-#+name: proj-dir-name
-#+BEGIN_SRC bash
-  test-project
-#+END_SRC
-
+** GNU module
 #+name: gnu-module
 #+BEGIN_SRC bash
   GNU/4.8.3
 #+END_SRC
 
+** CUDA module
 #+name: cuda-module
 #+BEGIN_SRC bash
   CUDA/7.0
 #+END_SRC
 
+** script parameters
 #+name: script-parameters
 #+BEGIN_SRC bash
   TEST_PARAM="HELLO"
   TEST_VAL=8
 #+END_SRC
 
+** script
 #+name: script
 #+BEGIN_SRC bash
   for ((x=0; x<=${TEST_VAL}; x++)); do
@@ -74,86 +102,16 @@
   done
 #+END_SRC
 
-* Noweb Template
-#+BEGIN_SRC bash :tangle submit.pbs :noweb yes :shebang #!/bin/sh -login
-  #PBS -N <<job-name>>
-  #PBS -l walltime=<<walltime>>
-  #PBS -l mem=<<memory>>
-  #PBS -l nodes=<<num-nodes>>:ppn=<<num-processors>>:gpus=<<num-gpus>>
-  #PBS -l feature=<<feature>>
-  #PBS -e pbs.err
-  #PBS -o pbs.out
-  #PBS -M <<email>>
-  #PBS -m abe
 
-  #------------------------------
+* Additional Tweaks
 
-  # script for running jobs on HPCC
+These are things that change less often but are particular to a
+particular place and user.
 
+** Environmental Variables
 
-  ## set the base name for this script
-  ################################################################################
-  # base directory for this script
-  BASE="<<base-name>>"
-  PROJDIR="<<proj-dir>>"
-  BASEDIR="$PROJDIR/$BASE"
-
-  ################################################################################
-
-  # the job name
-  JOBNAME=${BASE}-${PBS_JOBID}
-  # directories, keep these named the same as this is a common pattern
-  # the main development directory
-  DEVDIR=$MY_DICKSON_LAB/$BASEDIR
-  # the directory with all of the input
-  INPUTDIR=$DEVDIR/input
-  # directory to put job results in
-  JOBSDIR=$DEVDIR/jobs
-  # the directory for the output of this job
-  JOBDIR=$JOBSDIR/$PBS_JOBID
-  # the directory output will be put into after completion
-  OUTPUTDIR=$JOBDIR/output
-  # directory to execute code in
-  # EXECDIR=$TMPDIR
-  # EXECDIR=$MY_DICKSON_SCRATCH/$JOBNAME
-  ###### README Problems with Scratch so I will just run in the jobs dir
-  EXECDIR=$JOBDIR
-  # directory to put temporary output in
-  EXECOUTPUTDIR=$EXECDIR/output
-  # directories to copy the stdout and stderr from scripts
-  STDOUT=$JOBDIR/stdout
-  STDERR=$JOBDIR/stderr
-  # we should redirect our own output streams but we will catch the PBS
-  # files as well
-  PBS_STDOUT=$PBS_O_WORKDIR/pbs.out
-  PBS_STDERR=$PBS_O_WORKDIR/pbs.err
-  # log files
-  LOG=$JOBDIR/log
-
-  # make these directories if they do not exist
-  mkdir -p $EXECDIR
-  mkdir -p $EXECOUTPUTDIR
-  mkdir -p $JOBDIR
-  mkdir -p $OUTPUTDIR
-  mkdir -p $STDOUT
-  mkdir -p $STDERR
-  mkdir -p $PBS_STDOUT
-  mkdir -p $PBS_STDERR
-  echo "Starting Log file" 1> $LOG 2> $LOG
-
-  # initial
-  #----------------------------------------
-  # load profile
-  source /etc/profile
-  # load hpcc modules
-  source /opt/software/modulefiles/setup_modules.sh
-  # load specific library modules
-  module load <<gnu-module>>
-  module load <<cuda-module>>
-
-  # general paths
-  #----------------------------------------
-
+#+name: env-vars
+#+BEGIN_SRC bash
   # scratch directory
   export SCRATCHDIR=/mnt/ls15/scratch
   # your home scratch
@@ -206,21 +164,13 @@
   # PATH
   export PATH=$ANACONDA_BIN:${DICKSON_LAB_BIN}:${OPENMM_ROOT_DIR}/bin:${MMTSBDIR}/perl:${DICKSON_LAB_PROGS}/charmm/exec/gnu:${PATH}
 
-  # check to make sure all these paths are correct
-  echo "" 1>> $LOG 2>> $LOG
-  echo "LOG $LOG" 1>> $LOG 2>> $LOG
-
-  # change to the exec dir
-  cd $EXECDIR
-
   # check to make sure all these paths for the job are correct
   echo "" 1>> $LOG 2>> $LOG
   echo "LOG $LOG" 1>> $LOG 2>> $LOG
   echo "PBS_JOBID $PBS_JOBID" 1>> $LOG 2>> $LOG
-  echo "BASE $BASE" 1>> $LOG 2>> $LOG
-  echo "BASEDIR $BASEDIR" 1>> $LOG 2>> $LOG
+  echo "TASK $TASK" 1>> $LOG 2>> $LOG
+  echo "TASKDIR $TASKDIR" 1>> $LOG 2>> $LOG
   echo "JOBNAME $JOBNAME" 1>> $LOG 2>> $LOG
-  echo "DEVDIR $DEVDIR" 1>> $LOG 2>> $LOG
   echo "JOBSDIR $JOBSDIR" 1>> $LOG 2>> $LOG
   echo "JOBDIR $JOBDIR" 1>> $LOG 2>> $LOG
   echo "OUTPUTDIR $OUTPUTDIR" 1>> $LOG 2>> $LOG
@@ -232,6 +182,103 @@
   echo "PBS_NODEFILE" 1>> $LOG 2>> $LOG
   cat $PBS_NODEFILE 1>> $LOG 2>> $LOG
   echo ""  1>> $LOG 2>> $LOG
+
+#+END_SRC
+
+
+
+
+* Noweb Template
+
+When you export/tangle this script the named code blocks will be
+inserted into their targets marked by `<<my-target>>` for a target
+called `my-target`.
+
+#+BEGIN_SRC bash :tangle submit.pbs :noweb yes :shebang #!/bin/sh -login
+  #PBS -N <<task-dir>>
+  #PBS -l walltime=<<walltime>>
+  #PBS -l mem=<<memory>>
+  #PBS -l nodes=<<num-nodes>>:ppn=<<num-processors>>:gpus=<<num-gpus>>
+  #PBS -l feature=<<feature>>
+  #PBS -e pbs.err
+  #PBS -o pbs.out
+  #PBS -M <<email>>
+  #PBS -m abe
+
+  #------------------------------
+
+  # script for running jobs on HPCC
+
+
+  ## set the base name for this script
+  ################################################################################
+  # base directory for this script
+  TASK="<<task-name>>"
+  TASKDIR="<<task-dir-path>>/$TASK"
+
+  ################################################################################
+
+  # the job name
+  JOBNAME=${TASK}-${PBS_JOBID}
+  # the directory with all of the input
+  INPUTDIR=$TASKDIR/input
+  # directory to put job results in
+  JOBSDIR=$TASKDIR/jobs
+  # the directory for the output of this job
+  JOBDIR=$JOBSDIR/$JOBNAME
+  # the directory output will be put into after completion
+  OUTPUTDIR=$JOBDIR/output
+
+  # directory to execute code in
+  # EXECDIR=$TMPDIR
+  # EXECDIR=$MY_DICKSON_SCRATCH/$JOBNAME
+  ###### README Problems with Scratch so I will just run in the jobs dir
+  EXECDIR=$JOBDIR
+  # directory to put temporary output in
+  EXECOUTPUTDIR=$EXECDIR/output
+
+  # directories to copy the stdout and stderr from scripts
+  STDOUT=$JOBDIR/stdout
+  STDERR=$JOBDIR/stderr
+  # we should redirect our own output streams but we will catch the PBS
+  # files as well
+  PBS_STDOUT=$TASKDIR/pbs.out
+  PBS_STDERR=$TASKDIR/pbs.err
+
+  # log files
+  LOG=$JOBDIR/log
+
+  # make these directories if they do not exist
+  mkdir -p $EXECDIR
+  mkdir -p $EXECOUTPUTDIR
+  mkdir -p $JOBDIR
+  mkdir -p $OUTPUTDIR
+  mkdir -p $STDOUT
+  mkdir -p $STDERR
+  mkdir -p $PBS_STDOUT
+  mkdir -p $PBS_STDERR
+  echo "Starting Log file" 1> $LOG 2> $LOG
+
+  # initial
+  #----------------------------------------
+  # load profile
+  source /etc/profile
+  # load hpcc modules
+  source /opt/software/modulefiles/setup_modules.sh
+  # load specific library modules
+  module load <<gnu-module>>
+  module load <<cuda-module>>
+
+  echo "" 1>> $LOG 2>> $LOG
+  echo "LOG $LOG" 1>> $LOG 2>> $LOG
+
+  ## general paths
+  ################################################################################
+  <<env-vars>>
+  ################################################################################
+
+  # change to the exec dir
+  cd $EXECDIR
 
   # remove current contents of the execdir, useful for if running
   # interactive job which writes to same dir, harmless if not
