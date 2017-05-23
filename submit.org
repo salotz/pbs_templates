@@ -1,0 +1,280 @@
+* Fill in these fields here:
+
+#+name: job-name
+#+BEGIN_SRC bash
+  test-job-name
+#+END_SRC
+
+
+#+name: walltime
+#+BEGIN_SRC bash
+  168:00:00
+#+END_SRC
+
+#+name: memory
+#+BEGIN_SRC bash
+  64gb
+#+END_SRC
+
+#+name: num-nodes
+#+BEGIN_SRC bash
+  2
+#+END_SRC
+
+#+name: num-processors
+#+BEGIN_SRC bash
+  8
+#+END_SRC
+
+#+name: num-gpus
+#+BEGIN_SRC bash
+  8
+#+END_SRC
+
+#+name: feature
+#+BEGIN_SRC bash
+  'gpgpu:intel16'
+#+END_SRC
+
+#+name: email
+#+BEGIN_SRC bash
+  samuel.lotz@gmail.com
+#+END_SRC
+
+#+name: base-name
+#+BEGIN_SRC bash
+  test-job-name
+#+END_SRC
+
+#+name: proj-dir-name
+#+BEGIN_SRC bash
+  test-project
+#+END_SRC
+
+#+name: gnu-module
+#+BEGIN_SRC bash
+  GNU/4.8.3
+#+END_SRC
+
+#+name: cuda-module
+#+BEGIN_SRC bash
+  CUDA/7.0
+#+END_SRC
+
+#+name: script-parameters
+#+BEGIN_SRC bash
+  TEST_PARAM="HELLO"
+  TEST_VAL=8
+#+END_SRC
+
+#+name: script
+#+BEGIN_SRC bash
+  for ((x=0; x<=${TEST_VAL}; x++)); do
+      echo $TEST_PARAM > "file_$TEST_VAL.txt" 2> $LOG;
+  done
+#+END_SRC
+
+* Noweb Template
+#+BEGIN_SRC bash :tangle submit.pbs :noweb yes :shebang #!/bin/sh -login
+  #PBS -N <<job-name>>
+  #PBS -l walltime=<<walltime>>
+  #PBS -l mem=<<memory>>
+  #PBS -l nodes=<<num-nodes>>:ppn=<<num-processors>>:gpus=<<num-gpus>>
+  #PBS -l feature=<<feature>>
+  #PBS -e pbs.err
+  #PBS -o pbs.out
+  #PBS -M <<email>>
+  #PBS -m abe
+
+  #------------------------------
+
+  # script for running jobs on HPCC
+
+
+  ## set the base name for this script
+  ################################################################################
+  # base directory for this script
+  BASE="<<base-name>>"
+  PROJDIR="<<proj-dir>>"
+  BASEDIR="$PROJDIR/$BASE"
+
+  ################################################################################
+
+  # the job name
+  JOBNAME=${BASE}-${PBS_JOBID}
+  # directories, keep these named the same as this is a common pattern
+  # the main development directory
+  DEVDIR=$MY_DICKSON_LAB/$BASEDIR
+  # the directory with all of the input
+  INPUTDIR=$DEVDIR/input
+  # directory to put job results in
+  JOBSDIR=$DEVDIR/jobs
+  # the directory for the output of this job
+  JOBDIR=$JOBSDIR/$PBS_JOBID
+  # the directory output will be put into after completion
+  OUTPUTDIR=$JOBDIR/output
+  # directory to execute code in
+  # EXECDIR=$TMPDIR
+  # EXECDIR=$MY_DICKSON_SCRATCH/$JOBNAME
+  ###### README Problems with Scratch so I will just run in the jobs dir
+  EXECDIR=$JOBDIR
+  # directory to put temporary output in
+  EXECOUTPUTDIR=$EXECDIR/output
+  # directories to copy the stdout and stderr from scripts
+  STDOUT=$JOBDIR/stdout
+  STDERR=$JOBDIR/stderr
+  # we should redirect our own output streams but we will catch the PBS
+  # files as well
+  PBS_STDOUT=$PBS_O_WORKDIR/pbs.out
+  PBS_STDERR=$PBS_O_WORKDIR/pbs.err
+  # log files
+  LOG=$JOBDIR/log
+
+  # make these directories if they do not exist
+  mkdir -p $EXECDIR
+  mkdir -p $EXECOUTPUTDIR
+  mkdir -p $JOBDIR
+  mkdir -p $OUTPUTDIR
+  mkdir -p $STDOUT
+  mkdir -p $STDERR
+  mkdir -p $PBS_STDOUT
+  mkdir -p $PBS_STDERR
+  echo "Starting Log file" 1> $LOG 2> $LOG
+
+  # initial
+  #----------------------------------------
+  # load profile
+  source /etc/profile
+  # load hpcc modules
+  source /opt/software/modulefiles/setup_modules.sh
+  # load specific library modules
+  module load <<gnu-module>>
+  module load <<cuda-module>>
+
+  # general paths
+  #----------------------------------------
+
+  # scratch directory
+  export SCRATCHDIR=/mnt/ls15/scratch
+  # your home scratch
+  export SCRATCH_HOME=$SCRATCH
+
+  # the Dickson lab directory
+  export DICKSON_LAB=/mnt/research/DicksonLab
+  # your Dickson lab dir
+  export MY_DICKSON_LAB=$DICKSON_LAB/$USER
+  # locally installed programs
+  export DICKSON_LAB_PROGS=${DICKSON_LAB}/programs
+  # the installed binaries for Dickson lab
+  export DICKSON_LAB_BIN=${DICKSON_LAB_PROGS}/bin
+  # directory with installed libraries
+  export DICKSON_LAB_LIB=${DICKSON_LAB_PROGS}/lib
+  # Dickson lab scratch directory
+  export DICKSON_SCRATCH=$SCRATCHDIR/groups/DicksonLab
+  # your Dickson lab scratch dir
+  export MY_DICKSON_SCRATCH=$DICKSON_SCRATCH/$USER
+
+  # set environmental variables to programs needed
+  #----------------------------------------
+  # charmm executables
+  export CHARMM_DIR=${DICKSON_LAB_PROGS}/charmm
+  export CHARMM=${CHARMM_DIR}/exec/gnu/charmm
+  export MPICHARMM=${CHARMM_DIR}/exec/gnu_M/charmm
+  export OPENMMCHARMM=${CHARMM_DIR}/exec/gnu/charmm_OpenMM6.3
+
+  # charmm data
+  export CHARMMDATA=${DICKSON_LAB}/toppar
+
+  # set the path for mmtsb
+  export MMTSBDIR=$DICKSON_LAB_PROGS/mmtsb
+
+  # OpenMM
+  export OPENMM_ROOT_DIR=/mnt/research/DicksonLab/programs/OpenMM6.3
+  export OPENMM_PLUGIN_DIR=$OPENMM_ROOT_DIR/lib/plugins
+  export OPENMM_PLATFORM=CUDA
+  unset OPENMM_DEVICE
+
+
+  # Anaconda Python paths
+  export ANACONDA_DIR=$DICKSON_LAB_PROGS/anaconda2
+  export ANACONDA_BIN=$ANACONDA_DIR/bin
+  export PYTHONHOME=$ANACONDA_DIR
+
+  # Library paths
+  export LD_LIBRARY_PATH=${DICKSON_LAB_LIB}:${CUDADIR}/lib:${OPENMM_ROOT_DIR}/lib:${OPENMM_PLUGIN_DIR}:${LD_LIBRARY_PATH}
+
+  # PATH
+  export PATH=$ANACONDA_BIN:${DICKSON_LAB_BIN}:${OPENMM_ROOT_DIR}/bin:${MMTSBDIR}/perl:${DICKSON_LAB_PROGS}/charmm/exec/gnu:${PATH}
+
+  # check to make sure all these paths are correct
+  echo "" 1>> $LOG 2>> $LOG
+  echo "LOG $LOG" 1>> $LOG 2>> $LOG
+
+  # change to the exec dir
+  cd $EXECDIR
+
+  # check to make sure all these paths for the job are correct
+  echo "" 1>> $LOG 2>> $LOG
+  echo "LOG $LOG" 1>> $LOG 2>> $LOG
+  echo "PBS_JOBID $PBS_JOBID" 1>> $LOG 2>> $LOG
+  echo "BASE $BASE" 1>> $LOG 2>> $LOG
+  echo "BASEDIR $BASEDIR" 1>> $LOG 2>> $LOG
+  echo "JOBNAME $JOBNAME" 1>> $LOG 2>> $LOG
+  echo "DEVDIR $DEVDIR" 1>> $LOG 2>> $LOG
+  echo "JOBSDIR $JOBSDIR" 1>> $LOG 2>> $LOG
+  echo "JOBDIR $JOBDIR" 1>> $LOG 2>> $LOG
+  echo "OUTPUTDIR $OUTPUTDIR" 1>> $LOG 2>> $LOG
+  echo "EXECDIR $EXECDIR" 1>> $LOG 2>> $LOG
+  echo "STDOUT $STDOUT" 1>> $LOG 2>> $LOG
+  echo "STDERR $STDERR" 1>> $LOG 2>> $LOG
+  echo "PBS_STDOUT $PBS_STDOUT" 1>> $LOG 2>> $LOG
+  echo "PBS_STDERR $PBS_STDERR" 1>> $LOG 2>> $LOG
+  echo "PBS_NODEFILE" 1>> $LOG 2>> $LOG
+  cat $PBS_NODEFILE 1>> $LOG 2>> $LOG
+  echo ""  1>> $LOG 2>> $LOG
+
+  # remove current contents of the execdir, useful for if running
+  # interactive job which writes to same dir, harmless if not
+  echo "Removing existing files if they exist in $EXECDIR" 1>> $LOG 2>> $LOG
+  rm -rf $EXECDIR/* 1>> $LOG 2>> $LOG
+
+  # copy the input files to the execution directory
+  echo "Copying input files from $INPUTDIR to $EXECDIR" 1>> $LOG 2>> $LOG
+  cp -rf $INPUTDIR/* $EXECDIR/ 1>> $LOG 2>> $LOG
+
+  # write file names in $EXECDIR to log
+  echo ">> ls $EXECDIR" 1>> $LOG 2>> $LOG
+  ls $EXECDIR 1>> $LOG 2>> $LOG
+  echo "" 1>> $LOG 2>> $LOG
+
+  #------------------------------
+  ## set the parameters that will be used in this script
+  ################################################################################
+  <<script-parameters>>
+  ################################################################################
+
+
+  #------------------------------
+  ## The code for this script
+  ################################################################################
+
+  echo "Running script" 1>> $LOG 2>> $LOG
+  echo "-----------------------" 1>> $LOG 2>> $LOG
+
+  <<script>>
+
+  echo "-----------------------" 1>> $LOG 2>> $LOG
+  echo "" 1>> $LOG 2>> $LOG
+  echo "done with script" 1>> $LOG 2>> $LOG
+
+  #echo "copying output files back to $OUTPUTDIR from $EXECDIR" 1>> $LOG 2>> $LOG
+  #cp -rf $EXECDIR/ $OUTPUTDIR/ 1>> $LOG 2>> $LOG
+  ################################################################################
+
+  # copy the output files back to the job directory
+  # echo "copying output files from $EXECDIR to $OUTPUTDIR" 1>> $LOG 2>> $LOG
+  #cp -rf $EXECDIR/ $OUTPUTDIR/
+
+  # and remove all files from scratch
+  #rm -rf $EXECDIR 2>> $LOG
+#+END_SRC
