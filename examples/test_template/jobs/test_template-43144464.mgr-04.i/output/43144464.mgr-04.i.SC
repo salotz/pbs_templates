@@ -8,7 +8,7 @@
 
 #PBS -e pbs.err
 #PBS -o pbs.out
-#PBS -M $USER@email.com
+#PBS -M samuel.lotz@gmail.com
 #PBS -m abe
 
 # ------------------------------
@@ -17,7 +17,7 @@
 # task name, this is the name of the directory for the task
 TASK="test_template"
 # directory path for this task
-TASKDIR="$HOME/$TASK"
+TASKDIR="$MY_DICKSON_LAB/pbs_templates/examples/$TASK"
 
 # the directory with all of the input
 INPUTDIR=$TASKDIR/input
@@ -109,7 +109,7 @@ env | grep PBS  1>> $LOG 2>> $LOG
 # PBS JOBID number
 echo "PBS_JOBID number"  1>> $LOG 2>> $LOG
 PBS_JOBID_NUM=(${PBS_JOBID//./ })
-echo "PBS_JOBID_NUM: $PBS_JOBID_NUM"
+echo "PBS_JOBID_NUM: $PBS_JOBID_NUM" 1>> $LOG 2>> $LOG
 
 # PBS stdout and stderr file paths
 PBS_JOB_STDOUT="$PBS_STDOUT/$TASK.o$PBS_JOBID_NUM"
@@ -274,7 +274,9 @@ echo "Setting Script parameters"  1>> $LOG 2>> $LOG
 echo "------------" 1>> $LOG 2>> $LOG
 echo ""   1>> $LOG 2>> $LOG
 
-
+TEST_PARAM="HELLO"
+TEST_VAL=8
+TEST_FILE="test_input.txt"
 
 echo ""   1>> $LOG 2>> $LOG
 # ===============================================================================
@@ -287,7 +289,11 @@ echo "------------" 1>> $LOG 2>> $LOG
 echo "Running script" 1>> $LOG 2>> $LOG
 echo "===============================================================================" 1>> $LOG 2>> $LOG
 
-
+echo "HELLO beginning the script body"
+cat $TEST_FILE 1>> $LOG 2>> $LOG
+for ((x=0; x<=${TEST_VAL}; x++)); do
+    echo ${TEST_PARAM} > "file_${x}.txt" 2>> $LOG;
+done
 
 echo "===============================================================================" 1>> $LOG 2>> $LOG
 echo "done with script" 1>> $LOG 2>> $LOG

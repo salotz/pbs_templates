@@ -1,0 +1,304 @@
+Starting Log file
+----------------------------------------
+
+----------------------------------------
+PBS Resource requests
+----------------------------------------
+
+walltime 5:00
+memory 4gb
+num-nodes 1
+num-processors 1
+num-gpus 
+feature 
+
+----------------------------------------
+Check Paths
+----------------------------------------
+
+LOG /mnt/research/DicksonLab/lotzsamu/pbs_templates/examples/test_template/jobs/test_template-43144464.mgr-04.i/log
+PBS_JOBID 43144464.mgr-04.i
+TASK test_template
+TASKDIR /mnt/research/DicksonLab/lotzsamu/pbs_templates/examples/test_template
+INPUTDIR /mnt/research/DicksonLab/lotzsamu/pbs_templates/examples/test_template/input
+JOBSDIR /mnt/research/DicksonLab/lotzsamu/pbs_templates/examples/test_template/jobs
+JOBNAME test_template-43144464.mgr-04.i
+JOBDIR /mnt/research/DicksonLab/lotzsamu/pbs_templates/examples/test_template/jobs/test_template-43144464.mgr-04.i
+OUTPUTDIR /mnt/research/DicksonLab/lotzsamu/pbs_templates/examples/test_template/jobs/test_template-43144464.mgr-04.i/output
+EXECDIR /mnt/research/DicksonLab/lotzsamu/pbs_templates/examples/test_template/jobs/test_template-43144464.mgr-04.i/exec
+STDOUT /mnt/research/DicksonLab/lotzsamu/pbs_templates/examples/test_template/jobs/test_template-43144464.mgr-04.i/pbs.out
+STDERR /mnt/research/DicksonLab/lotzsamu/pbs_templates/examples/test_template/jobs/test_template-43144464.mgr-04.i/pbs.err
+PBS_STDOUT /mnt/research/DicksonLab/lotzsamu/pbs_templates/examples/test_template/pbs.out
+PBS_STDERR /mnt/research/DicksonLab/lotzsamu/pbs_templates/examples/test_template/pbs.err
+PBS_NODEFILE
+csn-005
+
+----------------------------------------
+PBS Environmental Variables
+----------------------------------------
+
+PBS ENV:
+PBS_VERSION=TORQUE-6.1.1.1
+PBS_JOBNAME=test_template
+PBS_ENVIRONMENT=PBS_BATCH
+PBS_O_WORKDIR=/mnt/research/DicksonLab/lotzsamu/pbs_templates/examples/test_template
+PBS_TASKNUM=1
+PBS_O_HOME=/mnt/home/lotzsamu
+PBS_WALLTIME=300
+PBS_MOMPORT=15003
+PBS_GPUFILE=/var/spool/torque/aux//43144464.mgr-04.igpu
+PBS_O_QUEUE=main
+PBS_O_LOGNAME=lotzsamu
+PBS_O_LANG=en_US.UTF-8
+PBS_JOBCOOKIE=20F5CF25F4AFC0D0320BCE3436D2B1E6
+PBS_NODENUM=0
+PBS_NUM_NODES=1
+PBS_O_SHELL=/bin/bash
+PBS_JOBID=43144464.mgr-04.i
+PBS_O_HOST=dev-intel16-k80.i
+PBS_VNODENUM=0
+PBS_QUEUE=main
+PBS_O_MAIL=/var/spool/mail/lotzsamu
+PBS_MICFILE=/var/spool/torque/aux//43144464.mgr-04.imic
+PBS_NP=1
+PBS_O_SERVER=mgr-04
+PBS_NUM_PPN=1
+PBS_NODEFILE=/var/spool/torque/aux//43144464.mgr-04.i
+PBS_O_PATH=/mnt/home/lotzsamu/anaconda3/bin:/mnt/research/DicksonLab/programs/mmtsb/perl:/mnt/research/DicksonLab/programs/charmm/exec/gnu:/opt/software/cudatoolkit/8.0/bin:/opt/software/OpenMPI/1.6.5--GCC-4.8.2/bin:/opt/software/GCC/4.8.3/bin:/opt/software/powertools/bin:/opt/software/Stata/13.0:/opt/software/MATLAB/R2014a/bin:/opt/software/Python/2.7.2--GCC-4.4.5/bin:/opt/software/cmake/2.8.5--GCC-4.4.5/bin:/opt/moab/bin:/mnt/home/lotzsamu/anaconda3/bin:/mnt/research/DicksonLab/programs/mmtsb/perl:/mnt/research/DicksonLab/programs/charmm/exec/gnu:/usr/lib64/qt-3.3/bin:/opt/software/lmod/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/hpcc/bin:/opt/ibutils/bin
+PBS_JOBID number
+PBS_JOBID_NUM: 43144464
+PBS_NODEFILE:
+csn-005
+PBS_GPUFILE:
+cat: /var/spool/torque/aux//43144464.mgr-04.igpu: No such file or directory
+PBS_MICFILE:
+cat: /var/spool/torque/aux//43144464.mgr-04.imic: No such file or directory
+
+
+----------------------------------------
+Initialization
+----------------------------------------
+------------
+RUNNING: source /etc/profile
+------------
+
+------------
+RUNNING: source /opt/software/modulefiles/setup_modules.sh
+------------
+
+Activating Modules:
+  1) Boost/1.47.0     2) OpenMPI/1.4.3     3) R/2.15.1     4) TBB/4.1.0
+
+
+------------
+RUNNING: module load GNU/4.8.3
+------------
+
+Inactive Modules:
+  1) R
+
+Due to MODULEPATH changes the following have been reloaded:
+  1) TBB/4.1.0
+
+The following have been reloaded with a version change:
+  1) Boost/1.47.0 => Boost/1.58.0     3) OpenMPI/1.4.3 => OpenMPI/1.6.5
+  2) GNU/4.4.5 => GNU/4.8.3
+
+
+------------
+RUNNING: module load CUDA/7.0
+------------
+
+The following have been reloaded with a version change:
+  1) CUDA/6.0 => CUDA/7.0
+
+
+------------
+Setting environmental variables
+------------
+------------
+moving to EXECDIR: /mnt/research/DicksonLab/lotzsamu/pbs_templates/examples/test_template/jobs/test_template-43144464.mgr-04.i/exec
+------------
+
+------------
+Removing existing files if they exist in EXECDIR: /mnt/research/DicksonLab/lotzsamu/pbs_templates/examples/test_template/jobs/test_template-43144464.mgr-04.i/exec
+------------
+
+------------
+Copying input files from INPUTDIR: /mnt/research/DicksonLab/lotzsamu/pbs_templates/examples/test_template/input to EXECDIR: /mnt/research/DicksonLab/lotzsamu/pbs_templates/examples/test_template/jobs/test_template-43144464.mgr-04.i/exec
+------------
+
+------------
+Copying submission script /mnt/research/DicksonLab/lotzsamu/pbs_templates/examples/test_template/test_template to EXECDIR: /mnt/research/DicksonLab/lotzsamu/pbs_templates/examples/test_template/jobs/test_template-43144464.mgr-04.i/exec
+------------
+
+------------
+listing of EXECDIR: /mnt/research/DicksonLab/lotzsamu/pbs_templates/examples/test_template/jobs/test_template-43144464.mgr-04.i/exec
+------------
+43144464.mgr-04.i.SC
+test_input.txt
+
+------------
+Environmental variables before execution:
+------------
+MKLROOT=/opt/software/ClusterStudio/2013sp1/composer_xe_2013_sp1.0.080/mkl
+DL=/mnt/research/DicksonLab
+MANPATH=/opt/software/OpenMPI/1.6.5--GCC-4.8.2/share/man:/opt/software/GCC/4.8.3/share/man:/opt/software/ClusterStudio/2013sp1/composer_xe_2013_sp1.0.080/man/en_US:/opt/software/Python/2.7.2--GCC-4.4.5/share/man:/opt/software/cmake/2.8.5--GCC-4.4.5/man:/usr/share/man
+HOSTNAME=csn-005
+_ModuleTable003_=Il09ImFjdGl2ZSIsfSxHTlU9e1siRk4iXT0iL29wdC9zb2Z0d2FyZS9tb2R1bGVmaWxlcy9jb21waWxlcnMvR05VLzQuOC4zLmx1YSIsWyJkZWZhdWx0Il09MCxbImZ1bGxOYW1lIl09IkdOVS80LjguMyIsWyJsb2FkT3JkZXIiXT03LFsibVR5cGUiXT0idyIscHJvcFQ9e30sWyJzaG9ydCJdPSJHTlUiLFsic3RhdHVzIl09ImFjdGl2ZSIsfSxNQVRMQUI9e1siRk4iXT0iL29wdC9zb2Z0d2FyZS9tb2R1bGVmaWxlcy9iaW5hcmllcy9NQVRMQUIvUjIwMTRhLmx1YSIsWyJkZWZhdWx0Il09MSxbImZ1bGxOYW1lIl09Ik1BVExBQi9SMjAxNGEiLFsibG9hZE9yZGVyIl09NCxbIm1UeXBlIl09InciLHByb3BUPXt9LFsic2hvcnQiXT0iTUFUTEFCIixbInN0YXR1cyJdPSJhY3RpdmUi
+PBS_VERSION=TORQUE-6.1.1.1
+SHELL=/bin/bash
+HPCC_MODULES_PATH=/opt/software/modulefiles/
+HISTSIZE=1000
+PROFILEREAD=true
+PBS_JOBNAME=test_template
+TMPDIR=/mnt/local/43144464.mgr-04.i
+MODULEPATH_ROOT=/opt/software/modulefiles
+LMOD_DEFAULT_MODULEPATH=/opt/software/modulefiles/compilers:/opt/software/modulefiles/binaries
+CPPFLAGS=-I/opt/software/cudatoolkit/7.0/include -I/opt/software/boost/1.58.0--GCC-4.8.2/include -I/opt/software/ClusterStudio/2011.0/composerxe-2011.5.220/tbb/include -I/opt/software/GCC/4.8.3/include -I/opt/software/ClusterStudio/2013sp1/composer_xe_2013_sp1.0.080/mkl/include/fftw -I/opt/software/ClusterStudio/2013sp1/composer_xe_2013_sp1.0.080/mkl/include -I/opt/software/Python/2.7.2--GCC-4.4.5/include
+OPENMM_BIN=/mnt/research/DicksonLab/programs/OpenMM6.3/bin
+PERL5LIB=/opt/moab/lib/perl5:/opt/moab/lib/perl5:/opt/moab/lib/perl5:/opt/moab/lib/perl5:/opt/moab/lib/perl5
+LIBRARY_PATH=/opt/software/cudatoolkit/7.0/lib64:/opt/software/cudatoolkit/7.0/lib:/opt/software/boost/1.58.0--GCC-4.8.2/lib:/opt/software/ClusterStudio/2011.0/composerxe-2011.5.220/tbb/lib/intel64/cc4.1.0_libc2.4_kernel2.6.16.21/irml:/opt/software/ClusterStudio/2011.0/composerxe-2011.5.220/tbb/lib/intel64/cc4.1.0_libc2.4_kernel2.6.16.21:/opt/software/OpenMPI/1.6.5--GCC-4.8.2/lib:/opt/software/GCC/4.8.3/lib64:/opt/software/GCC/4.8.3/lib:/opt/software/ClusterStudio/2013sp1/composer_xe_2013_sp1.0.080/mkl/lib/intel64:/opt/software/Python/2.7.2--GCC-4.4.5/lib
+MPICHARMM=/mnt/research/DicksonLab/programs/charmm/exec/gnu_M/charmm
+MMTSBDIR=/mnt/research/DicksonLab/programs/mmtsb
+PBS_ENVIRONMENT=PBS_BATCH
+OLDPWD=/mnt/home/lotzsamu
+QTDIR=/usr/lib64/qt-3.3
+QTINC=/usr/lib64/qt-3.3/include
+PBS_O_WORKDIR=/mnt/research/DicksonLab/lotzsamu/pbs_templates/examples/test_template
+MIC_LD_LIBRARY_PATH=/opt/software/ClusterStudio/2013sp1/composer_xe_2013_sp1.0.080/mkl/lib/mic
+Matlab_ROOT_DIR=/opt/software/MATLAB/R2014a/bin
+_ModuleTable007_=cy8xLjIiLFsibG9hZE9yZGVyIl09MSxbIm1UeXBlIl09InciLHByb3BUPXt9LFsic2hvcnQiXT0icG93ZXJ0b29scyIsWyJzdGF0dXMiXT0iYWN0aXZlIix9LH0sbXBhdGhBPXsiL29wdC9zb2Z0d2FyZS9tb2R1bGVmaWxlcy9DVURBLzcuMC9tb2R1bGVmaWxlcyIsIi9vcHQvc29mdHdhcmUvbW9kdWxlZmlsZXMvR05VLzQuOC4zL09wZW5NUEkvMS42LjUiLCIvb3B0L3NvZnR3YXJlL21vZHVsZWZpbGVzL0dOVS80LjguMy9tb2R1bGVmaWxlcyIsIi9vcHQvc29mdHdhcmUvbW9kdWxlZmlsZXMvR05VLzQuOC4yL21vZHVsZWZpbGVzIiwiL29wdC9zb2Z0d2FyZS9tb2R1bGVmaWxlcy9QeXRob24vMi43LjIiLCIvb3B0L3NvZnR3YXJlL21vZHVsZWZpbGVzL2NvbXBpbGVycyIsIi9v
+ANACONDA_BIN=/mnt/research/DicksonLab/programs/anaconda2/bin
+USER=lotzsamu
+PBS_TASKNUM=1
+LMOD_sys=Linux
+LD_LIBRARY_PATH=/mnt/research/DicksonLab/programs/lib:/opt/software/cudatoolkit/7.0/lib:/mnt/research/DicksonLab/programs/OpenMM6.3/lib:/mnt/research/DicksonLab/programs/OpenMM6.3/lib/plugins:/opt/software/cudatoolkit/7.0/computeprof/bin:/opt/software/cudatoolkit/7.0/lib64:/opt/software/cudatoolkit/7.0/lib:/opt/software/boost/1.58.0--GCC-4.8.2/lib:/opt/software/ClusterStudio/2011.0/composerxe-2011.5.220/tbb/lib/intel64/cc4.1.0_libc2.4_kernel2.6.16.21/irml:/opt/software/ClusterStudio/2011.0/composerxe-2011.5.220/tbb/lib/intel64/cc4.1.0_libc2.4_kernel2.6.16.21:/opt/software/OpenMPI/1.6.5--GCC-4.8.2/lib:/opt/software/GMP/5.1.3--GCC-4.4.5/lib:/opt/software/MPFR/3.1.2--GCC-4.4.5/lib:/opt/software/MPC/1.0.1--GCC-4.4.5/lib:/opt/software/GCC/4.8.3/lib64:/opt/software/GCC/4.8.3/lib:/opt/software/ClusterStudio/2013sp1/composer_xe_2013_sp1.0.080/mkl/lib/intel64:/opt/software/MATLAB/R2014a/sys/opengl/lib/glnxa64:/opt/software/Python/2.7.2--GCC-4.4.5/lib/python2.7/lib-dynload:/opt/software/Python/2.7.2--GCC-4.4.5/lib:/mnt/research/DicksonLab/programs/lib
+MY_DICKSON_LAB=/mnt/research/DicksonLab/lotzsamu
+PBS_O_HOME=/mnt/home/lotzsamu
+DICKSON_LAB_PROGS=/mnt/research/DicksonLab/programs
+PTOOLS_ROOT=/opt/software/powertools
+_ModuleTable004_=LH0sTUtMPXtbIkZOIl09Ii9vcHQvc29mdHdhcmUvbW9kdWxlZmlsZXMvYmluYXJpZXMvTUtMLzExLjEubHVhIixbImRlZmF1bHQiXT0wLFsiZnVsbE5hbWUiXT0iTUtMLzExLjEiLFsibG9hZE9yZGVyIl09NixbIm1UeXBlIl09InciLHByb3BUPXt9LFsic2hvcnQiXT0iTUtMIixbInN0YXR1cyJdPSJhY3RpdmUiLH0sT3Blbk1QST17WyJGTiJdPSIvb3B0L3NvZnR3YXJlL21vZHVsZWZpbGVzL0dOVS80LjguMy9tb2R1bGVmaWxlcy9PcGVuTVBJLzEuNi41Lmx1YSIsWyJkZWZhdWx0Il09MCxbImZ1bGxOYW1lIl09Ik9wZW5NUEkvMS42LjUiLFsibG9hZE9yZGVyIl09OCxbIm1UeXBlIl09InciLHByb3BUPXt9LFsic2hvcnQiXT0iT3Blbk1QSSIsWyJzdGF0dXMiXT0iYWN0aXZl
+SALOTZ_SCRATCH=/mnt/ls15/scratch/users/lotzsamu/users/lotzsamu
+PBS_WALLTIME=300
+PBS_MOMPORT=15003
+PBS_GPUFILE=/var/spool/torque/aux//43144464.mgr-04.igpu
+DICKSON_LAB=/mnt/research/DicksonLab
+PBS_O_QUEUE=main
+SCRATCHDIR=/mnt/ls15/scratch
+OPENMM_PLATFORM=CUDA
+PATH=/mnt/research/DicksonLab/programs/anaconda2/bin:/mnt/research/DicksonLab/programs/bin:/mnt/research/DicksonLab/programs/OpenMM6.3/bin:/mnt/research/DicksonLab/programs/mmtsb/perl:/mnt/research/DicksonLab/programs/charmm/exec/gnu:/opt/software/cudatoolkit/7.0/computeprof/bin:/opt/software/cudatoolkit/7.0/bin:/opt/software/OpenMPI/1.6.5--GCC-4.8.2/bin:/opt/software/GCC/4.8.3/bin:/opt/software/Stata/13.0:/opt/software/MATLAB/R2014a/bin:/opt/software/Python/2.7.2--GCC-4.4.5/bin:/opt/software/cmake/2.8.5--GCC-4.4.5/bin:/opt/moab/bin:/mnt/home/lotzsamu/anaconda3/bin:/mnt/research/DicksonLab/programs/mmtsb/perl:/mnt/research/DicksonLab/programs/charmm/exec/gnu:/opt/software/powertools/bin:/usr/lib64/qt-3.3/bin:/opt/software/lmod/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/hpcc/bin:/usr/local/bin:/opt/ibutils/bin
+PBS_O_LOGNAME=lotzsamu
+MAIL=/var/spool/mail/lotzsamu
+CUDA_INSTALL_PATH=/opt/software/cudatoolkit/7.0
+_ModuleTable001_=X01vZHVsZVRhYmxlXz17WyJhY3RpdmVTaXplIl09MTEsYmFzZU1wYXRoQT17Ii9vcHQvc29mdHdhcmUvbW9kdWxlZmlsZXMvL2NvbXBpbGVycyIsIi9vcHQvc29mdHdhcmUvbW9kdWxlZmlsZXMvL2JpbmFyaWVzIix9LFsiY19yZWJ1aWxkVGltZSJdPWZhbHNlLGZhbWlseT17WyJNUEkiXT0iT3Blbk1QSSIsWyJjb21waWxlciJdPSJHTlUiLH0saW5hY3RpdmU9e30sbVQ9e0Jvb3N0PXtbIkZOIl09Ii9vcHQvc29mdHdhcmUvbW9kdWxlZmlsZXMvR05VLzQuOC4yL21vZHVsZWZpbGVzL0Jvb3N0LzEuNTguMC5sdWEiLFsiZGVmYXVsdCJdPTAsWyJmdWxsTmFtZSJdPSJCb29zdC8xLjU4LjAiLFsibG9hZE9yZGVyIl09MTAsWyJtVHlwZSJdPSJ3Iixwcm9wVD17fSxbInNob3J0Il09
+PBS_O_LANG=en_US.UTF-8
+PBS_JOBCOOKIE=20F5CF25F4AFC0D0320BCE3436D2B1E6
+MKL_NUM_THREADS=1
+OPENMM_PLUGIN=/mnt/research/DicksonLab/programs/OpenMM6.3/lib/lib/plugins
+PWD=/mnt/research/DicksonLab/lotzsamu/pbs_templates/examples/test_template/jobs/test_template-43144464.mgr-04.i/exec
+MLM_LICENSE_FILE=27000@lm-01.i
+DICKSON=/mnt/research/DicksonLab
+MY_DICKSON_SCRATCH=/mnt/ls15/scratch/groups/DicksonLab/lotzsamu
+LANG=en_US.UTF-8
+PBS_NODENUM=0
+MOABHOMEDIR=/opt/moab
+MODULEPATH=/opt/software/modulefiles/CUDA/7.0/modulefiles:/opt/software/modulefiles/GNU/4.8.3/OpenMPI/1.6.5:/opt/software/modulefiles/GNU/4.8.3/modulefiles:/opt/software/modulefiles/GNU/4.8.2/modulefiles:/opt/software/modulefiles/Python/2.7.2:/opt/software/modulefiles/compilers:/opt/software/modulefiles/compat:/opt/software/modulefiles/binaries
+OPENMM_ROOT_DIR=/mnt/research/DicksonLab/programs/OpenMM6.3
+PBS_NUM_NODES=1
+KDEDIRS=/usr
+CUDADIR=/opt/software/cudatoolkit/7.0
+_ModuleTable_Sz_=8
+MPC=/mpc
+OPENMM_LIB=/mnt/research/DicksonLab/programs/OpenMM6.3/lib
+PYTHONHOME=/mnt/research/DicksonLab/programs/anaconda2
+CUDA_SDK_ROOT_DIR=/opt/software/cudatoolkit/7.0
+PBS_O_SHELL=/bin/bash
+F77=/opt/software/GCC/4.8.3/bin/gfortran
+LMOD_CMD=/opt/software/lmod/4.1.4icer5/libexec/lmod
+_ModuleTable005_=Iix9LFB5dGhvbj17WyJGTiJdPSIvb3B0L3NvZnR3YXJlL21vZHVsZWZpbGVzL2JpbmFyaWVzL1B5dGhvbi8yLjcuMi5sdWEiLFsiZGVmYXVsdCJdPTEsWyJmdWxsTmFtZSJdPSJQeXRob24vMi43LjIiLFsibG9hZE9yZGVyIl09MyxbIm1UeXBlIl09InciLHByb3BUPXt9LFsic2hvcnQiXT0iUHl0aG9uIixbInN0YXR1cyJdPSJhY3RpdmUiLH0sUj17WyJmdWxsTmFtZSJdPSJSIixbImxvYWRPcmRlciJdPTE0LHByb3BUPXt9LFsic2hvcnQiXT0iUiIsWyJzdGF0dXMiXT0iaW5hY3RpdmUiLH0sU3RhdGE9e1siRk4iXT0iL29wdC9zb2Z0d2FyZS9tb2R1bGVmaWxlcy9iaW5hcmllcy9TdGF0YS8xMy4wLmx1YSIsWyJkZWZhdWx0Il09MSxbImZ1bGxOYW1lIl09IlN0YXRhLzEzLjAi
+DICKSON_LAB_LIB=/mnt/research/DicksonLab/programs/lib
+PBS_JOBID=43144464.mgr-04.i
+DICKSON_SCRATCH=/mnt/ls15/scratch/groups/DicksonLab
+ENVIRONMENT=BATCH
+HISTCONTROL=ignoredups
+CXX=/opt/software/GCC/4.8.3/bin/g++
+OPENMM_CUDA_COMPILER=/opt/software/cudatoolkit/8.0/bin/nvcc
+BOOST_INCLUDEDIR=/opt/software/boost/1.58.0--GCC-4.8.2/include/
+HOME=/mnt/home/lotzsamu
+SHLVL=2
+SETENV_DIR=/mnt/research/DicksonLab/.setenv_hpcc.d
+TACC_FAMILY_COMPILER=GNU
+CHARMM=/mnt/research/DicksonLab/programs/charmm/exec/gnu/charmm
+ANACONDA_DIR=/mnt/research/DicksonLab/programs/anaconda2
+PBS_O_HOST=dev-intel16-k80.i
+_ModuleTable002_=IkJvb3N0IixbInN0YXR1cyJdPSJhY3RpdmUiLH0sQ01ha2U9e1siRk4iXT0iL29wdC9zb2Z0d2FyZS9tb2R1bGVmaWxlcy9iaW5hcmllcy9DTWFrZS8yLjguNS5sdWEiLFsiZGVmYXVsdCJdPTEsWyJmdWxsTmFtZSJdPSJDTWFrZS8yLjguNSIsWyJsb2FkT3JkZXIiXT0yLFsibVR5cGUiXT0idyIscHJvcFQ9e30sWyJzaG9ydCJdPSJDTWFrZSIsWyJzdGF0dXMiXT0iYWN0aXZlIix9LENVREE9e1siRk4iXT0iL29wdC9zb2Z0d2FyZS9tb2R1bGVmaWxlcy9jb21waWxlcnMvQ1VEQS83LjAubHVhIixbImRlZmF1bHQiXT0wLFsiZnVsbE5hbWUiXT0iQ1VEQS83LjAiLFsibG9hZE9yZGVyIl09MTEsWyJtVHlwZSJdPSJ3Iixwcm9wVD17fSxbInNob3J0Il09IkNVREEiLFsic3RhdHVz
+FC=/opt/software/GCC/4.8.3/bin/gfortran
+BOOST_LIBRARYDIR=/opt/software/boost/1.58.0--GCC-4.8.2/lib/
+PBS_VNODENUM=0
+BASH_ENV=/opt/software/lmod/lmod/init/bash
+_ModuleTable008_=cHQvc29mdHdhcmUvbW9kdWxlZmlsZXMvY29tcGF0IiwiL29wdC9zb2Z0d2FyZS9tb2R1bGVmaWxlcy9iaW5hcmllcyIsfSxbInZlcnNpb24iXT0yLH0=
+TACC_FAMILY_MPI=OpenMPI
+LOGNAME=lotzsamu
+LMOD_arch=x86_64
+PYTHONPATH=:/mnt/home/lotzsamu:/mnt/home/lotzsamu
+OPENMM_PLUGIN_DIR=/mnt/research/DicksonLab/programs/OpenMM6.3/lib/plugins
+BOOST_ROOT=/opt/software/boost/1.58.0--GCC-4.8.2
+CVS_RSH=ssh
+QTLIB=/usr/lib64/qt-3.3/lib
+PBS_QUEUE=main
+MODULESHOME=
+PBS_O_MAIL=/var/spool/mail/lotzsamu
+PBS_MICFILE=/var/spool/torque/aux//43144464.mgr-04.imic
+LESSOPEN=||/usr/bin/lesspipe.sh %s
+OMP_NUM_THREADS=1
+PKG_CONFIG_PATH=/opt/software/GCC/4.8.3/lib/pkgconfig:/opt/software/Python/2.7.2--GCC-4.4.5/lib/pkgconfig
+DICKSON_LAB_BIN=/mnt/research/DicksonLab/programs/bin
+HPCC_CLUSTER_FLAVOR=intel14-k20
+is=bash
+EMAIL=$USER@msu.edu
+OPENMMCHARMM=/mnt/research/DicksonLab/programs/charmm/exec/gnu/charmm_OpenMM6.3
+LMOD_FAMILY_COMPILER=GNU
+SYS_SOFTWARE=/opt/software
+PBS_NP=1
+CC=/opt/software/GCC/4.8.3/bin/gcc
+SS=/mnt/ls15/scratch/users/lotzsamu/users/lotzsamu
+CHARMM_DIR=/mnt/research/DicksonLab/programs/charmm
+PBS_O_SERVER=mgr-04
+PBS_NUM_PPN=1
+LMOD_DIR=/opt/software/lmod/4.1.4icer5/libexec/
+_ModuleTable006_=LFsibG9hZE9yZGVyIl09NSxbIm1UeXBlIl09InciLHByb3BUPXt9LFsic2hvcnQiXT0iU3RhdGEiLFsic3RhdHVzIl09ImFjdGl2ZSIsfSxUQkI9e1siRk4iXT0iL29wdC9zb2Z0d2FyZS9tb2R1bGVmaWxlcy9HTlUvNC44LjIvbW9kdWxlZmlsZXMvVEJCLzQuMS4wLmx1YSIsWyJkZWZhdWx0Il09MCxbImZ1bGxOYW1lIl09IlRCQi80LjEuMCIsWyJsb2FkT3JkZXIiXT05LFsibVR5cGUiXT0idyIscHJvcFQ9e30sWyJzaG9ydCJdPSJUQkIiLFsic3RhdHVzIl09ImFjdGl2ZSIsfSxwb3dlcnRvb2xzPXtbIkZOIl09Ii9vcHQvc29mdHdhcmUvbW9kdWxlZmlsZXMvYmluYXJpZXMvcG93ZXJ0b29scy8xLjIubHVhIixbImRlZmF1bHQiXT0xLFsiZnVsbE5hbWUiXT0icG93ZXJ0b29s
+SCRATCH_HOME=/mnt/ls15/scratch/users/lotzsamu
+LMOD_FAMILY_MPI=OpenMPI
+PBS_NODEFILE=/var/spool/torque/aux//43144464.mgr-04.i
+G_BROKEN_FILENAMES=1
+SCRATCH=/mnt/ls15/scratch/users/lotzsamu
+CHARMMDATA=/mnt/research/DicksonLab/toppar
+PBS_O_PATH=/mnt/home/lotzsamu/anaconda3/bin:/mnt/research/DicksonLab/programs/mmtsb/perl:/mnt/research/DicksonLab/programs/charmm/exec/gnu:/opt/software/cudatoolkit/8.0/bin:/opt/software/OpenMPI/1.6.5--GCC-4.8.2/bin:/opt/software/GCC/4.8.3/bin:/opt/software/powertools/bin:/opt/software/Stata/13.0:/opt/software/MATLAB/R2014a/bin:/opt/software/Python/2.7.2--GCC-4.4.5/bin:/opt/software/cmake/2.8.5--GCC-4.4.5/bin:/opt/moab/bin:/mnt/home/lotzsamu/anaconda3/bin:/mnt/research/DicksonLab/programs/mmtsb/perl:/mnt/research/DicksonLab/programs/charmm/exec/gnu:/usr/lib64/qt-3.3/bin:/opt/software/lmod/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/hpcc/bin:/opt/ibutils/bin
+FFLAGS=-I/opt/software/ClusterStudio/2013sp1/composer_xe_2013_sp1.0.080/mkl/include/intel64/lp64 -I/opt/software/ClusterStudio/2013sp1/composer_xe_2013_sp1.0.080/mkl/include/fftw -I/opt/software/ClusterStudio/2013sp1/composer_xe_2013_sp1.0.080/mkl/include
+_=/bin/env
+
+------------
+Setting Script parameters
+------------
+
+
+------------
+Running script
+===============================================================================
+This is the test input file
+===============================================================================
+done with script
+------------
+
+------------
+moving EXECDIR /mnt/research/DicksonLab/lotzsamu/pbs_templates/examples/test_template/jobs/test_template-43144464.mgr-04.i/exec to OUTPUTDIR /mnt/research/DicksonLab/lotzsamu/pbs_templates/examples/test_template/jobs/test_template-43144464.mgr-04.i/output
+------------
+
+------------
+PBS STDOUT is in /mnt/research/DicksonLab/lotzsamu/pbs_templates/examples/test_template/pbs.out/test_template.o43144464
+------------
+
+------------
+PBS STDERR /mnt/research/DicksonLab/lotzsamu/pbs_templates/examples/test_template/pbs.err/test_template.e43144464
+------------

@@ -1,6 +1,6 @@
 #!/bin/sh -login
-#PBS -N <<name of job >>
-#PBS -l walltime=<<walltime>>
+#PBS -N NETS_sEH_TS
+#PBS -l walltime=168:00:00
 #PBS -l mem=64gb
 #PBS -l nodes=2:ppn=8:gpus=8
 #PBS -l feature='gpgpu:intel16'
