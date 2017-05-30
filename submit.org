@@ -116,10 +116,6 @@ University HPCC.
 #+END_SRC
 
 
-* Additional Tweaks
-
-These are things that change less often but are particular to a
-particular place and user.
 
 ** Environmental Variables
 
@@ -220,8 +216,16 @@ called `my-target`.
   JOBNAME=${TASK}-${PBS_JOBID}
   # the directory for the output of this job
   JOBDIR=$JOBSDIR/$JOBNAME
+
   # the directory output will be put into after completion
   OUTPUTDIR=$JOBDIR/output
+  # if we are running an interactive job we want to write out the new
+  # outputs to another outputs folder
+  count=1
+  while [ -d "$OUTPUTDIR" ]; then
+    OUTPUTDIR="$OUTPUTDIR$((count++))"
+  fi
+
   # log files
   LOG=$JOBDIR/log
   # directories to copy the stdout and stderr from scripts
