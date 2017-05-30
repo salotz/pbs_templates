@@ -24,7 +24,7 @@ task dir would be `$HOME/this_project`.
 
 #+name: task-dir-path
 #+BEGIN_SRC bash
-  $HOME
+  ./
 #+END_SRC
 
 
@@ -82,24 +82,16 @@ task dir would be `$HOME/this_project`.
 ** email
 #+name: email
 #+BEGIN_SRC bash
-  $USER@email.com
+  samuel.lotz@gmail.com
 #+END_SRC
 
 ** GNU module
-
-This is particular to the module loding system at the Michigan State
-University HPCC.
-
 #+name: gnu-module
 #+BEGIN_SRC bash
   GNU/4.8.3
 #+END_SRC
 
 ** CUDA module
-
-This is particular to the module loding system at the Michigan State
-University HPCC.
-
 #+name: cuda-module
 #+BEGIN_SRC bash
   CUDA/7.0
@@ -108,11 +100,19 @@ University HPCC.
 ** script parameters
 #+name: script-parameters
 #+BEGIN_SRC bash
+  TEST_PARAM="HELLO"
+  TEST_VAL=8
+  TEST_FILE="test_input.txt"
 #+END_SRC
 
 ** script
 #+name: script
 #+BEGIN_SRC bash
+  echo "HELLO beginning the script body"
+  cat $TEST_FILE 1>> $LOG 2>> $LOG
+  for ((x=0; x<=${TEST_VAL}; x++)); do
+      echo ${TEST_PARAM} > "file_${x}.txt" 2>> $LOG;
+  done
 #+END_SRC
 
 
