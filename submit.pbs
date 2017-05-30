@@ -1,9 +1,9 @@
 #!/bin/sh -login
-#PBS -N test-job-name
-#PBS -l walltime=168:00:00
-#PBS -l mem=64gb
-#PBS -l nodes=2:ppn=8:gpus=8
-#PBS -l feature='gpgpu:intel16'
+#PBS -N 
+#PBS -l walltime=5:00
+#PBS -l mem=4gb
+#PBS -l nodes=1:ppn=1:gpus=0
+#PBS -l feature=''
 #PBS -e pbs.err
 #PBS -o pbs.out
 #PBS -M samuel.lotz@gmail.com
@@ -17,25 +17,22 @@
 ## set the base name for this script
 ################################################################################
 # base directory for this script
-BASE="test-job-name"
-PROJDIR=""
-BASEDIR="$PROJDIR/$BASE"
+TASK="test-task-name"
+TASKDIR="$MY_DICKSON_LAB/$TASK"
 
 ################################################################################
 
 # the job name
-JOBNAME=${BASE}-${PBS_JOBID}
-# directories, keep these named the same as this is a common pattern
-# the main development directory
-DEVDIR=$MY_DICKSON_LAB/$BASEDIR
+JOBNAME=${TASK}-${PBS_JOBID}
 # the directory with all of the input
-INPUTDIR=$DEVDIR/input
+INPUTDIR=$TASKDIR/input
 # directory to put job results in
-JOBSDIR=$DEVDIR/jobs
+JOBSDIR=$TASKDIR/jobs
 # the directory for the output of this job
-JOBDIR=$JOBSDIR/$PBS_JOBID
+JOBDIR=$JOBSDIR/$JOBNAME
 # the directory output will be put into after completion
 OUTPUTDIR=$JOBDIR/output
+
 # directory to execute code in
 # EXECDIR=$TMPDIR
 # EXECDIR=$MY_DICKSON_SCRATCH/$JOBNAME
@@ -43,13 +40,15 @@ OUTPUTDIR=$JOBDIR/output
 EXECDIR=$JOBDIR
 # directory to put temporary output in
 EXECOUTPUTDIR=$EXECDIR/output
+
 # directories to copy the stdout and stderr from scripts
 STDOUT=$JOBDIR/stdout
 STDERR=$JOBDIR/stderr
 # we should redirect our own output streams but we will catch the PBS
 # files as well
-PBS_STDOUT=$PBS_O_WORKDIR/pbs.out
-PBS_STDERR=$PBS_O_WORKDIR/pbs.err
+PBS_STDOUT=$TASKDIR/pbs.out
+PBS_STDERR=$TASKDIR/pbs.err
+
 # log files
 LOG=$JOBDIR/log
 
@@ -74,9 +73,11 @@ source /opt/software/modulefiles/setup_modules.sh
 module load GNU/4.8.3
 module load CUDA/7.0
 
-# general paths
-#----------------------------------------
+echo "" 1>> $LOG 2>> $LOG
+echo "LOG $LOG" 1>> $LOG 2>> $LOG
 
+## general paths
+################################################################################
 # scratch directory
 export SCRATCHDIR=/mnt/ls15/scratch
 # your home scratch
@@ -129,21 +130,13 @@ export LD_LIBRARY_PATH=${DICKSON_LAB_LIB}:${CUDADIR}/lib:${OPENMM_ROOT_DIR}/lib:
 # PATH
 export PATH=$ANACONDA_BIN:${DICKSON_LAB_BIN}:${OPENMM_ROOT_DIR}/bin:${MMTSBDIR}/perl:${DICKSON_LAB_PROGS}/charmm/exec/gnu:${PATH}
 
-# check to make sure all these paths are correct
-echo "" 1>> $LOG 2>> $LOG
-echo "LOG $LOG" 1>> $LOG 2>> $LOG
-
-# change to the exec dir
-cd $EXECDIR
-
 # check to make sure all these paths for the job are correct
 echo "" 1>> $LOG 2>> $LOG
 echo "LOG $LOG" 1>> $LOG 2>> $LOG
 echo "PBS_JOBID $PBS_JOBID" 1>> $LOG 2>> $LOG
-echo "BASE $BASE" 1>> $LOG 2>> $LOG
-echo "BASEDIR $BASEDIR" 1>> $LOG 2>> $LOG
+echo "TASK $TASK" 1>> $LOG 2>> $LOG
+echo "TASKDIR $TASKDIR" 1>> $LOG 2>> $LOG
 echo "JOBNAME $JOBNAME" 1>> $LOG 2>> $LOG
-echo "DEVDIR $DEVDIR" 1>> $LOG 2>> $LOG
 echo "JOBSDIR $JOBSDIR" 1>> $LOG 2>> $LOG
 echo "JOBDIR $JOBDIR" 1>> $LOG 2>> $LOG
 echo "OUTPUTDIR $OUTPUTDIR" 1>> $LOG 2>> $LOG
@@ -155,6 +148,11 @@ echo "PBS_STDERR $PBS_STDERR" 1>> $LOG 2>> $LOG
 echo "PBS_NODEFILE" 1>> $LOG 2>> $LOG
 cat $PBS_NODEFILE 1>> $LOG 2>> $LOG
 echo ""  1>> $LOG 2>> $LOG
+
+################################################################################
+
+# change to the exec dir
+cd $EXECDIR
 
 # remove current contents of the execdir, useful for if running
 # interactive job which writes to same dir, harmless if not
