@@ -207,6 +207,7 @@ called `my-target`.
   echo ""   1>> $LOG 2>> $LOG
 
   # write out explicitly the run parameters
+  echo "* PBS Directives" &>> $LOG
   echo "----------------------------------------"  1>> $LOG 2>> $LOG
   echo "PBS Resource requests" 1>> $LOG 2>> $LOG
   echo "----------------------------------------" 1>> $LOG 2>> $LOG
@@ -221,6 +222,7 @@ called `my-target`.
   echo "" 1>> $LOG 2>> $LOG
 
   # print the paths for all the variables constructed in this script
+  echo "* Path Check" &>> $LOG
   echo "----------------------------------------"  1>> $LOG 2>> $LOG
   echo "Check Paths"  1>> $LOG 2>> $LOG
   echo "----------------------------------------"  1>> $LOG 2>> $LOG
@@ -245,6 +247,7 @@ called `my-target`.
   echo ""  1>> $LOG 2>> $LOG
 
   # saving PBS environmental variables
+  echo "* Environmental Variables" &>> $LOG
   echo "----------------------------------------"  1>> $LOG 2>> $LOG
   echo "PBS Environmental Variables" 1>> $LOG 2>> $LOG
   echo "----------------------------------------" 1>> $LOG 2>> $LOG
@@ -255,6 +258,7 @@ called `my-target`.
   env | grep PBS  1>> $LOG 2>> $LOG
 
   # PBS JOBID number
+  echo "* PBS Job info" &>> $LOG
   echo "PBS_JOBID number"  1>> $LOG 2>> $LOG
   PBS_JOBID_NUM=(${PBS_JOBID//./ })
   echo "PBS_JOBID_NUM: $PBS_JOBID_NUM" 1>> $LOG 2>> $LOG
@@ -275,6 +279,7 @@ called `my-target`.
   echo ""  1>> $LOG 2>> $LOG
 
   # initial
+  echo "* Environment Initialization" &>> $LOG
   echo ""  1>> $LOG 2>> $LOG
   echo "----------------------------------------" 1>> $LOG 2>> $LOG
   echo "Initialization" 1>> $LOG 2>> $LOG
@@ -320,6 +325,7 @@ called `my-target`.
   <<env-vars>>
   # ===============================================================================
 
+  echo "* Preparing Execution Directory" &>> $LOG
   # remove current contents of the execdir, useful for if running
   # interactive job which writes to same dir, harmless if not
   echo "------------" 1>> $LOG 2>> $LOG
@@ -366,6 +372,7 @@ called `my-target`.
   # ------------------------------
   # set the parameters that will be used in this script
   # ===============================================================================
+  echo "* Script Parameters" &>> $LOG
   echo "------------" 1>> $LOG 2>> $LOG
   echo "Setting Script parameters"  1>> $LOG 2>> $LOG
   echo "------------" 1>> $LOG 2>> $LOG
@@ -380,6 +387,7 @@ called `my-target`.
   # ------------------------------
   # The code for this script
   # ===============================================================================
+  echo "* Script" &>> $LOG
   echo "------------" 1>> $LOG 2>> $LOG
   echo "Running script" 1>> $LOG 2>> $LOG
   echo "===============================================================================" 1>> $LOG 2>> $LOG
@@ -394,6 +402,7 @@ called `my-target`.
   # ===============================================================================
 
   # move the output files in EXECDIR back to the job output dir
+  echo "* Clean Up" &>> $LOG
   echo "------------" 1>> $LOG 2>> $LOG
   echo "moving EXECDIR $EXECDIR to OUTPUTDIR $OUTPUTDIR" 1>> $LOG 2>> $LOG
   echo "------------" 1>> $LOG 2>> $LOG
