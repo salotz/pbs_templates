@@ -1,4 +1,19 @@
 * Fill in these fields here:
+
+** Project dir
+
+Task directories should be organized in some way. This variable is the
+path preceeding your task dir.
+
+For instance if you working in `$HOME/this_project/task1` then your
+task dir would be `$HOME/this_project`.
+
+#+name: task-dir-path
+#+BEGIN_SRC bash
+  $HOME
+#+END_SRC
+
+
 ** task name
 
 When running PBS scripts you might want to run something multiple
@@ -12,19 +27,6 @@ task is set up in.
 #+name: task-name
 #+BEGIN_SRC bash
   test_template
-#+END_SRC
-
-** task dir
-
-Task directories should be organized in some way. This variable is the
-path preceeding your task dir.
-
-For instance if you working in `$HOME/this_project/task1` then your
-task dir would be `$HOME/this_project`.
-
-#+name: task-dir-path
-#+BEGIN_SRC bash
-  $HOME
 #+END_SRC
 
 
@@ -121,57 +123,11 @@ University HPCC.
 
 #+name: env-vars
 #+BEGIN_SRC bash
-  # scratch directory
-  export SCRATCHDIR=/mnt/ls15/scratch
-  # your home scratch
-  export SCRATCH_HOME=$SCRATCH
-
-  # the Dickson lab directory
-  export DICKSON_LAB=/mnt/research/DicksonLab
-  # your Dickson lab dir
-  export MY_DICKSON_LAB=$DICKSON_LAB/$USER
-  # locally installed programs
-  export DICKSON_LAB_PROGS=${DICKSON_LAB}/programs
-  # the installed binaries for Dickson lab
-  export DICKSON_LAB_BIN=${DICKSON_LAB_PROGS}/bin
-  # directory with installed libraries
-  export DICKSON_LAB_LIB=${DICKSON_LAB_PROGS}/lib
-  # Dickson lab scratch directory
-  export DICKSON_SCRATCH=$SCRATCHDIR/groups/DicksonLab
-  # your Dickson lab scratch dir
-  export MY_DICKSON_SCRATCH=$DICKSON_SCRATCH/$USER
-
-  # set environmental variables to programs needed
-  #----------------------------------------
-  # charmm executables
-  export CHARMM_DIR=${DICKSON_LAB_PROGS}/charmm
-  export CHARMM=${CHARMM_DIR}/exec/gnu/charmm
-  export MPICHARMM=${CHARMM_DIR}/exec/gnu_M/charmm
-  export OPENMMCHARMM=${CHARMM_DIR}/exec/gnu/charmm_OpenMM6.3
-
-  # charmm data
-  export CHARMMDATA=${DICKSON_LAB}/toppar
-
-  # set the path for mmtsb
-  export MMTSBDIR=$DICKSON_LAB_PROGS/mmtsb
-
-  # OpenMM
-  export OPENMM_ROOT_DIR=/mnt/research/DicksonLab/programs/OpenMM6.3
-  export OPENMM_PLUGIN_DIR=$OPENMM_ROOT_DIR/lib/plugins
-  export OPENMM_PLATFORM=CUDA
-  unset OPENMM_DEVICE
-
-
-  # Anaconda Python paths
-  export ANACONDA_DIR=$DICKSON_LAB_PROGS/anaconda2
+  export ANACONDA_DIR=$DICKSON_LAB_PROGS/anaconda3
   export ANACONDA_BIN=$ANACONDA_DIR/bin
-  export PYTHONHOME=$ANACONDA_DIR
-
-  # Library paths
-  export LD_LIBRARY_PATH=${DICKSON_LAB_LIB}:${CUDADIR}/lib:${OPENMM_ROOT_DIR}/lib:${OPENMM_PLUGIN_DIR}:${LD_LIBRARY_PATH}
 
   # PATH
-  export PATH=$ANACONDA_BIN:${DICKSON_LAB_BIN}:${OPENMM_ROOT_DIR}/bin:${MMTSBDIR}/perl:${DICKSON_LAB_PROGS}/charmm/exec/gnu:${PATH}
+  export PATH=$ANACONDA_BIN:$PATH
 
 #+END_SRC
 
@@ -222,9 +178,9 @@ called `my-target`.
   # if we are running an interactive job we want to write out the new
   # outputs to another outputs folder
   count=1
-  while [ -d "$OUTPUTDIR" ]; then
-    OUTPUTDIR="$OUTPUTDIR$((count++))"
-  fi
+  while [ -d "$OUTPUTDIR" ]; do
+    OUTPUTDIR="$OUTPUTDIR$((count++))";
+  done
 
   # log files
   LOG=$JOBDIR/log
@@ -364,13 +320,6 @@ called `my-target`.
   <<env-vars>>
   # ===============================================================================
 
-  # change to the exec dir
-  echo "------------" 1>> $LOG 2>> $LOG
-  echo "moving to EXECDIR: $EXECDIR" 1>> $LOG 2>> $LOG
-  echo "------------" 1>> $LOG 2>> $LOG
-  cd $EXECDIR 1>> $LOG 2>> $LOG
-  echo "" 1>> $LOG 2>> $LOG
-
   # remove current contents of the execdir, useful for if running
   # interactive job which writes to same dir, harmless if not
   echo "------------" 1>> $LOG 2>> $LOG
@@ -391,6 +340,13 @@ called `my-target`.
   echo "Copying submission script ${TASKDIR}/${PBS_JOBNAME} to EXECDIR: $EXECDIR" 1>> $LOG 2>> $LOG
   echo "------------" 1>> $LOG 2>> $LOG
   cp "${0}" $EXECDIR/ 1>> $LOG 2>> $LOG
+  echo "" 1>> $LOG 2>> $LOG
+
+  # change to the exec dir
+  echo "------------" 1>> $LOG 2>> $LOG
+  echo "moving to EXECDIR: $EXECDIR" 1>> $LOG 2>> $LOG
+  echo "------------" 1>> $LOG 2>> $LOG
+  cd $EXECDIR 1>> $LOG 2>> $LOG
   echo "" 1>> $LOG 2>> $LOG
 
   # write file names in $EXECDIR to log
