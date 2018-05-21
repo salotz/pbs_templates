@@ -154,6 +154,9 @@ called `my-target`.
   # ------------------------------
   # Script for running the task <<task-name>> with PBS on hpcc
 
+  # the date and time this was run
+  DATE=date
+
   # task name, this is the name of the directory for the task
   TASK="<<task-name>>"
   # directory path for this task
@@ -202,125 +205,126 @@ called `my-target`.
   mkdir -p $PBS_STDERR
 
   # Starting the LOG file
-  echo "Starting Log file" 1> $LOG 2> $LOG
-  echo "----------------------------------------" 1>> $LOG 2>> $LOG
-  echo ""   1>> $LOG 2>> $LOG
+  echo $DATE &> $LOG
+  echo "Starting Log file" &>> $LOG
+  echo "----------------------------------------" &>> $LOG
+  echo ""   &>> $LOG
 
   # write out explicitly the run parameters
   echo "* PBS Directives" &>> $LOG
-  echo "----------------------------------------"  1>> $LOG 2>> $LOG
-  echo "PBS Resource requests" 1>> $LOG 2>> $LOG
-  echo "----------------------------------------" 1>> $LOG 2>> $LOG
+  echo "----------------------------------------"  &>> $LOG
+  echo "PBS Resource requests" &>> $LOG
+  echo "----------------------------------------" &>> $LOG
 
-  echo "" 1>> $LOG 2>> $LOG
-  echo "walltime <<walltime>>" 1>> $LOG 2>> $LOG
-  echo "memory <<memory>>" 1>> $LOG 2>> $LOG
-  echo "num-nodes <<num-nodes>>" 1>> $LOG 2>> $LOG
-  echo "num-processors <<num-processors>>" 1>> $LOG 2>> $LOG
-  echo "num-gpus <<num-gpus>>" 1>> $LOG 2>> $LOG
-  echo "feature <<feature>>" 1>> $LOG 2>> $LOG
-  echo "" 1>> $LOG 2>> $LOG
+  echo "" &>> $LOG
+  echo "walltime <<walltime>>" &>> $LOG
+  echo "memory <<memory>>" &>> $LOG
+  echo "num-nodes <<num-nodes>>" &>> $LOG
+  echo "num-processors <<num-processors>>" &>> $LOG
+  echo "num-gpus <<num-gpus>>" &>> $LOG
+  echo "feature <<feature>>" &>> $LOG
+  echo "" &>> $LOG
 
   # print the paths for all the variables constructed in this script
   echo "* Path Check" &>> $LOG
-  echo "----------------------------------------"  1>> $LOG 2>> $LOG
-  echo "Check Paths"  1>> $LOG 2>> $LOG
-  echo "----------------------------------------"  1>> $LOG 2>> $LOG
+  echo "----------------------------------------"  &>> $LOG
+  echo "Check Paths"  &>> $LOG
+  echo "----------------------------------------"  &>> $LOG
 
-  echo "" 1>> $LOG 2>> $LOG
-  echo "LOG $LOG" 1>> $LOG 2>> $LOG
-  echo "PBS_JOBID $PBS_JOBID" 1>> $LOG 2>> $LOG
-  echo "TASK $TASK" 1>> $LOG 2>> $LOG
-  echo "TASKDIR $TASKDIR" 1>> $LOG 2>> $LOG
-  echo "INPUTDIR $INPUTDIR" 1>> $LOG 2>> $LOG
-  echo "JOBSDIR $JOBSDIR" 1>> $LOG 2>> $LOG
-  echo "JOBNAME $JOBNAME" 1>> $LOG 2>> $LOG
-  echo "JOBDIR $JOBDIR" 1>> $LOG 2>> $LOG
-  echo "OUTPUTDIR $OUTPUTDIR" 1>> $LOG 2>> $LOG
-  echo "EXECDIR $EXECDIR" 1>> $LOG 2>> $LOG
-  echo "STDOUT $STDOUT" 1>> $LOG 2>> $LOG
-  echo "STDERR $STDERR" 1>> $LOG 2>> $LOG
-  echo "PBS_STDOUT $PBS_STDOUT" 1>> $LOG 2>> $LOG
-  echo "PBS_STDERR $PBS_STDERR" 1>> $LOG 2>> $LOG
-  echo "PBS_NODEFILE" 1>> $LOG 2>> $LOG
-  cat $PBS_NODEFILE 1>> $LOG 2>> $LOG
-  echo ""  1>> $LOG 2>> $LOG
+  echo "" &>> $LOG
+  echo "LOG $LOG" &>> $LOG
+  echo "PBS_JOBID $PBS_JOBID" &>> $LOG
+  echo "TASK $TASK" &>> $LOG
+  echo "TASKDIR $TASKDIR" &>> $LOG
+  echo "INPUTDIR $INPUTDIR" &>> $LOG
+  echo "JOBSDIR $JOBSDIR" &>> $LOG
+  echo "JOBNAME $JOBNAME" &>> $LOG
+  echo "JOBDIR $JOBDIR" &>> $LOG
+  echo "OUTPUTDIR $OUTPUTDIR" &>> $LOG
+  echo "EXECDIR $EXECDIR" &>> $LOG
+  echo "STDOUT $STDOUT" &>> $LOG
+  echo "STDERR $STDERR" &>> $LOG
+  echo "PBS_STDOUT $PBS_STDOUT" &>> $LOG
+  echo "PBS_STDERR $PBS_STDERR" &>> $LOG
+  echo "PBS_NODEFILE" &>> $LOG
+  cat $PBS_NODEFILE &>> $LOG
+  echo ""  &>> $LOG
 
   # saving PBS environmental variables
   echo "* Environmental Variables" &>> $LOG
-  echo "----------------------------------------"  1>> $LOG 2>> $LOG
-  echo "PBS Environmental Variables" 1>> $LOG 2>> $LOG
-  echo "----------------------------------------" 1>> $LOG 2>> $LOG
+  echo "----------------------------------------"  &>> $LOG
+  echo "PBS Environmental Variables" &>> $LOG
+  echo "----------------------------------------" &>> $LOG
 
-  echo ""   1>> $LOG 2>> $LOG
+  echo ""   &>> $LOG
   # PBS env vars
-  echo "PBS ENV:"  1>> $LOG 2>> $LOG
-  env | grep PBS  1>> $LOG 2>> $LOG
+  echo "PBS ENV:"  &>> $LOG
+  env | grep PBS  &>> $LOG
 
   # PBS JOBID number
   echo "* PBS Job info" &>> $LOG
-  echo "PBS_JOBID number"  1>> $LOG 2>> $LOG
+  echo "PBS_JOBID number"  &>> $LOG
   PBS_JOBID_NUM=(${PBS_JOBID//./ })
-  echo "PBS_JOBID_NUM: $PBS_JOBID_NUM" 1>> $LOG 2>> $LOG
+  echo "PBS_JOBID_NUM: $PBS_JOBID_NUM" &>> $LOG
 
   # PBS stdout and stderr file paths
   PBS_JOB_STDOUT="$PBS_STDOUT/$TASK.o$PBS_JOBID_NUM"
   PBS_JOB_STDERR="$PBS_STDERR/$TASK.e$PBS_JOBID_NUM"
 
   # NODEFILE
-  echo "PBS_NODEFILE:"  1>> $LOG 2>> $LOG
-  cat $PBS_NODEFILE  1>> $LOG 2>> $LOG
+  echo "PBS_NODEFILE:"  &>> $LOG
+  cat $PBS_NODEFILE  &>> $LOG
   # GPUFILE
-  echo "PBS_GPUFILE:"  1>> $LOG 2>> $LOG
-  cat $PBS_GPUFILE  1>> $LOG 2>> $LOG
+  echo "PBS_GPUFILE:"  &>> $LOG
+  cat $PBS_GPUFILE  &>> $LOG
   # MICFILE
-  echo "PBS_MICFILE:"  1>> $LOG 2>> $LOG
-  cat $PBS_MICFILE  1>> $LOG 2>> $LOG
-  echo ""  1>> $LOG 2>> $LOG
+  echo "PBS_MICFILE:"  &>> $LOG
+  cat $PBS_MICFILE  &>> $LOG
+  echo ""  &>> $LOG
 
   # initial
   echo "* Environment Initialization" &>> $LOG
-  echo ""  1>> $LOG 2>> $LOG
-  echo "----------------------------------------" 1>> $LOG 2>> $LOG
-  echo "Initialization" 1>> $LOG 2>> $LOG
-  echo "----------------------------------------" 1>> $LOG 2>> $LOG
+  echo ""  &>> $LOG
+  echo "----------------------------------------" &>> $LOG
+  echo "Initialization" &>> $LOG
+  echo "----------------------------------------" &>> $LOG
 
   # load profile
-  echo "------------" 1>> $LOG 2>> $LOG
-  echo "RUNNING: source /etc/profile" 1>> $LOG 2>> $LOG
-  echo "------------" 1>> $LOG 2>> $LOG
-  source /etc/profile 1>> $LOG 2>> $LOG
-  echo "" 1>> $LOG 2>> $LOG
+  echo "------------" &>> $LOG
+  echo "RUNNING: source /etc/profile" &>> $LOG
+  echo "------------" &>> $LOG
+  source /etc/profile &>> $LOG
+  echo "" &>> $LOG
 
   # load hpcc modules
-  echo "------------" 1>> $LOG 2>> $LOG
-  echo "RUNNING: source /opt/software/modulefiles/setup_modules.sh" 1>> $LOG 2>> $LOG
-  echo "------------" 1>> $LOG 2>> $LOG
-  source /opt/software/modulefiles/setup_modules.sh 1>> $LOG 2>> $LOG
-  echo "" 1>> $LOG 2>> $LOG
+  echo "------------" &>> $LOG
+  echo "RUNNING: source /opt/software/modulefiles/setup_modules.sh" &>> $LOG
+  echo "------------" &>> $LOG
+  source /opt/software/modulefiles/setup_modules.sh &>> $LOG
+  echo "" &>> $LOG
 
   # load specific library modules
   # GNU Compilers
-  echo "------------" 1>> $LOG 2>> $LOG
-  echo "RUNNING: module load <<gnu-module>>" 1>> $LOG 2>> $LOG
-  echo "------------" 1>> $LOG 2>> $LOG
-  module load <<gnu-module>> 1>> $LOG 2>> $LOG
-  echo "" 1>> $LOG 2>> $LOG
+  echo "------------" &>> $LOG
+  echo "RUNNING: module load <<gnu-module>>" &>> $LOG
+  echo "------------" &>> $LOG
+  module load <<gnu-module>> &>> $LOG
+  echo "" &>> $LOG
 
   # CUDA compilers
-  echo "------------" 1>> $LOG 2>> $LOG
-  echo "RUNNING: module load <<cuda-module>>" 1>> $LOG 2>> $LOG
-  echo "------------" 1>> $LOG 2>> $LOG
-  module load <<cuda-module>> 1>> $LOG 2>> $LOG
-  echo "" 1>> $LOG 2>> $LOG
+  echo "------------" &>> $LOG
+  echo "RUNNING: module load <<cuda-module>>" &>> $LOG
+  echo "------------" &>> $LOG
+  module load <<cuda-module>> &>> $LOG
+  echo "" &>> $LOG
 
 
   # set environmental variables and other local variables that are used for 
   # many types of scripts
   # ===============================================================================
-  echo "------------" 1>> $LOG 2>> $LOG
-  echo "Setting environmental variables"  1>> $LOG 2>> $LOG
-  echo "------------" 1>> $LOG 2>> $LOG
+  echo "------------" &>> $LOG
+  echo "Setting environmental variables"  &>> $LOG
+  echo "------------" &>> $LOG
 
   <<env-vars>>
   # ===============================================================================
@@ -328,59 +332,59 @@ called `my-target`.
   echo "* Preparing Execution Directory" &>> $LOG
   # remove current contents of the execdir, useful for if running
   # interactive job which writes to same dir, harmless if not
-  echo "------------" 1>> $LOG 2>> $LOG
-  echo "Removing existing files if they exist in EXECDIR: $EXECDIR" 1>> $LOG 2>> $LOG
-  echo "------------" 1>> $LOG 2>> $LOG
-  rm -rf $EXECDIR/* 1>> $LOG 2>> $LOG
-  echo "" 1>> $LOG 2>> $LOG
+  echo "------------" &>> $LOG
+  echo "Removing existing files if they exist in EXECDIR: $EXECDIR" &>> $LOG
+  echo "------------" &>> $LOG
+  rm -rf $EXECDIR/* &>> $LOG
+  echo "" &>> $LOG
 
   # copy the input files to the execution directory
-  echo "------------" 1>> $LOG 2>> $LOG
-  echo "Copying input files from INPUTDIR: $INPUTDIR to EXECDIR: $EXECDIR" 1>> $LOG 2>> $LOG
-  echo "------------" 1>> $LOG 2>> $LOG
-  cp -rf $INPUTDIR/* $EXECDIR/ 1>> $LOG 2>> $LOG
-  echo "" 1>> $LOG 2>> $LOG
+  echo "------------" &>> $LOG
+  echo "Copying input files from INPUTDIR: $INPUTDIR to EXECDIR: $EXECDIR" &>> $LOG
+  echo "------------" &>> $LOG
+  cp -rf $INPUTDIR/* $EXECDIR/ &>> $LOG
+  echo "" &>> $LOG
 
   # copy the actual submission script used
-  echo "------------" 1>> $LOG 2>> $LOG
-  echo "Copying submission script ${TASKDIR}/${PBS_JOBNAME} to EXECDIR: $EXECDIR" 1>> $LOG 2>> $LOG
-  echo "------------" 1>> $LOG 2>> $LOG
-  cp "${0}" $EXECDIR/ 1>> $LOG 2>> $LOG
-  echo "" 1>> $LOG 2>> $LOG
+  echo "------------" &>> $LOG
+  echo "Copying submission script ${TASKDIR}/${PBS_JOBNAME} to EXECDIR: $EXECDIR" &>> $LOG
+  echo "------------" &>> $LOG
+  cp "${0}" $EXECDIR/ &>> $LOG
+  echo "" &>> $LOG
 
   # change to the exec dir
-  echo "------------" 1>> $LOG 2>> $LOG
-  echo "moving to EXECDIR: $EXECDIR" 1>> $LOG 2>> $LOG
-  echo "------------" 1>> $LOG 2>> $LOG
-  cd $EXECDIR 1>> $LOG 2>> $LOG
-  echo "" 1>> $LOG 2>> $LOG
+  echo "------------" &>> $LOG
+  echo "moving to EXECDIR: $EXECDIR" &>> $LOG
+  echo "------------" &>> $LOG
+  cd $EXECDIR &>> $LOG
+  echo "" &>> $LOG
 
   # write file names in $EXECDIR to log
-  echo "------------" 1>> $LOG 2>> $LOG
-  echo "listing of EXECDIR: $EXECDIR" 1>> $LOG 2>> $LOG
-  echo "------------" 1>> $LOG 2>> $LOG
-  ls $EXECDIR 1>> $LOG 2>> $LOG
-  echo "" 1>> $LOG 2>> $LOG
+  echo "------------" &>> $LOG
+  echo "listing of EXECDIR: $EXECDIR" &>> $LOG
+  echo "------------" &>> $LOG
+  ls $EXECDIR &>> $LOG
+  echo "" &>> $LOG
 
   # print out the environmental variables after modifications
-  echo "------------" 1>> $LOG 2>> $LOG
-  echo "Environmental variables before execution:"  1>> $LOG 2>> $LOG
-  echo "------------" 1>> $LOG 2>> $LOG
-  env 1>> $LOG 2>> $LOG
-  echo ""   1>> $LOG 2>> $LOG
+  echo "------------" &>> $LOG
+  echo "Environmental variables before execution:"  &>> $LOG
+  echo "------------" &>> $LOG
+  env &>> $LOG
+  echo ""   &>> $LOG
 
   # ------------------------------
   # set the parameters that will be used in this script
   # ===============================================================================
   echo "* Script Parameters" &>> $LOG
-  echo "------------" 1>> $LOG 2>> $LOG
-  echo "Setting Script parameters"  1>> $LOG 2>> $LOG
-  echo "------------" 1>> $LOG 2>> $LOG
-  echo ""   1>> $LOG 2>> $LOG
+  echo "------------" &>> $LOG
+  echo "Setting Script parameters"  &>> $LOG
+  echo "------------" &>> $LOG
+  echo ""   &>> $LOG
 
   <<script-parameters>>
 
-  echo ""   1>> $LOG 2>> $LOG
+  echo ""   &>> $LOG
   # ===============================================================================
 
 
@@ -388,36 +392,36 @@ called `my-target`.
   # The code for this script
   # ===============================================================================
   echo "* Script" &>> $LOG
-  echo "------------" 1>> $LOG 2>> $LOG
-  echo "Running script" 1>> $LOG 2>> $LOG
-  echo "===============================================================================" 1>> $LOG 2>> $LOG
+  echo "------------" &>> $LOG
+  echo "Running script" &>> $LOG
+  echo "===============================================================================" &>> $LOG
 
   <<script>>
 
-  echo "===============================================================================" 1>> $LOG 2>> $LOG
-  echo "done with script" 1>> $LOG 2>> $LOG
-  echo "------------" 1>> $LOG 2>> $LOG
-  echo ""   1>> $LOG 2>> $LOG
+  echo "===============================================================================" &>> $LOG
+  echo "done with script" &>> $LOG
+  echo "------------" &>> $LOG
+  echo ""   &>> $LOG
 
   # ===============================================================================
 
   # move the output files in EXECDIR back to the job output dir
   echo "* Clean Up" &>> $LOG
-  echo "------------" 1>> $LOG 2>> $LOG
-  echo "moving EXECDIR $EXECDIR to OUTPUTDIR $OUTPUTDIR" 1>> $LOG 2>> $LOG
-  echo "------------" 1>> $LOG 2>> $LOG
-  mv $EXECDIR $OUTPUTDIR  1>> $LOG 2>> $LOG
-  echo ""   1>> $LOG 2>> $LOG
+  echo "------------" &>> $LOG
+  echo "moving EXECDIR $EXECDIR to OUTPUTDIR $OUTPUTDIR" &>> $LOG
+  echo "------------" &>> $LOG
+  mv $EXECDIR $OUTPUTDIR  &>> $LOG
+  echo ""   &>> $LOG
 
 
   # move the PBS stdout and stderr files to the jobdir
-  echo "------------" 1>> $LOG 2>> $LOG
-  echo "PBS STDOUT is in $PBS_JOB_STDOUT" 1>> $LOG 2>> $LOG
-  echo "------------" 1>> $LOG 2>> $LOG
-  echo ""   1>> $LOG 2>> $LOG
+  echo "------------" &>> $LOG
+  echo "PBS STDOUT is in $PBS_JOB_STDOUT" &>> $LOG
+  echo "------------" &>> $LOG
+  echo ""   &>> $LOG
 
-  echo "------------" 1>> $LOG 2>> $LOG
-  echo "PBS STDERR $PBS_JOB_STDERR" 1>> $LOG 2>> $LOG
-  echo "------------" 1>> $LOG 2>> $LOG
+  echo "------------" &>> $LOG
+  echo "PBS STDERR $PBS_JOB_STDERR" &>> $LOG
+  echo "------------" &>> $LOG
 
 #+END_SRC
