@@ -155,7 +155,7 @@ called `my-target`.
   # Script for running the task <<task-name>> with PBS on hpcc
 
   # the date and time this was run
-  DATE=date
+  DATE=$(date)
 
   # task name, this is the name of the directory for the task
   TASK="<<task-name>>"
