@@ -154,6 +154,9 @@ called `my-target`.
   # ------------------------------
   # Script for running the task <<task-name>> with PBS on hpcc
 
+  # we print a simple confirmation to the terminal that we have started
+  echo "Starting job"
+
   # the date and time this was run
   DATE=$(date)
 
@@ -391,6 +394,10 @@ called `my-target`.
   # ------------------------------
   # The code for this script
   # ===============================================================================
+
+  # we print a simple confirmation to the terminal that we are starting the main script
+  echo "Starting main script"
+
   echo "* Script" &>> $LOG
   echo "------------" &>> $LOG
   echo "Running script" &>> $LOG
@@ -402,6 +409,9 @@ called `my-target`.
   echo "done with script" &>> $LOG
   echo "------------" &>> $LOG
   echo ""   &>> $LOG
+
+  # we print a simple confirmation to the terminal that we are starting the main script
+  echo "Finished main script"
 
   # ===============================================================================
 
@@ -424,4 +434,12 @@ called `my-target`.
   echo "PBS STDERR $PBS_JOB_STDERR" &>> $LOG
   echo "------------" &>> $LOG
 
+  # The last thing we do is move the log file to the output
+  echo "------------" 1>> $LOG 2>> $LOG
+  echo "moving LOG $LOG to OUTPUTDIR $OUTPUTDIR" 1>> $LOG 2>> $LOG
+  echo "------------" 1>> $LOG 2>> $LOG
+  mv $LOG $OUTPUTDIR/  1>> $LOG 2>> $LOG
+
+  # print to the main terminal that we are done
+  echo "Done with job"
 #+END_SRC
